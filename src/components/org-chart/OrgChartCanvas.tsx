@@ -1,3 +1,4 @@
+import { useCallback } from 'react'
 import { ReactFlow, Background, BackgroundVariant, Controls, type Node, type Edge, Position, Panel } from '@xyflow/react'
 import '@xyflow/react/dist/style.css'
 import type { DealContact } from '@/types'
@@ -8,37 +9,51 @@ const nodeTypes = { contact: ContactNode }
 const LAYER_X: Record<string, number> = { c001: 220, c002: 80, c003: 80, c004: 80, c005: 370 }
 const LAYER_Y: Record<string, number> = { c001: 0, c002: 140, c003: 280, c004: 420, c005: 140 }
 
-function buildNodesAndEdges(dealContacts: DealContact[]): { nodes: Node[]; edges: Edge[] } {
+interface Props {
+  dealContacts: DealContact[]
+  onContactSelect: (dc: DealContact) => void
+}
+
+export function OrgChartCanvas({ dealContacts, onContactSelect }: Props) {
   const nodes: Node[] = dealContacts.map((dc) => ({
-    id: dc.id, type: 'contact',
+    id: dc.id,
+    type: 'contact',
     position: { x: LAYER_X[dc.contact_id] ?? 220, y: LAYER_Y[dc.contact_id] ?? 0 },
-    data: { dealContact: dc },
+    data: { dealContact: dc, onSelect: onContactSelect },
     sourcePosition: Position.Bottom,
     targetPosition: Position.Top,
   }))
+
   const edges: Edge[] = dealContacts.filter((dc) => dc.reports_to).map((dc) => ({
     id: `e-${dc.reports_to}-${dc.id}`,
     source: dc.reports_to!,
     target: dc.id,
-    type: 'smoothstep',
+    type: 'default',
     style: { stroke: '#1E4D56', strokeWidth: 1.5 },
   }))
-  return { nodes, edges }
-}
 
-export function OrgChartCanvas({ dealContacts }: { dealContacts: DealContact[] }) {
-  const { nodes, edges } = buildNodesAndEdges(dealContacts)
+  const onNodeClick = useCallback(
+    (_: React.MouseEvent, node: Node) => {
+      const dc = (node.data as { dealContact: DealContact }).dealContact
+      if (dc) onContactSelect(dc)
+    },
+    [onContactSelect]
+  )
+
   return (
     <div className="h-full w-full">
-      <ReactFlow nodes={nodes} edges={edges} nodeTypes={nodeTypes}
+      <ReactFlow
+        nodes={nodes} edges={edges} nodeTypes={nodeTypes}
         fitView fitViewOptions={{ padding: 0.3 }}
         nodesDraggable={false} nodesConnectable={false}
-        panOnDrag zoomOnScroll elementsSelectable={false}>
+        elementsSelectable={false}
+        panOnDrag zoomOnScroll
+        onNodeClick={onNodeClick}
+      >
         <Background variant={BackgroundVariant.Dots} color="#1E4D56" gap={18} size={1} />
         <Controls showInteractive={false}
           className="!border-zinc-700 !bg-zinc-900 !rounded-xl !shadow-none [&_button]:!border-zinc-700 [&_button]:!bg-zinc-900 [&_button:hover]:!bg-zinc-800" />
 
-        {/* Legend — horizontal along the bottom (x-axis style) */}
         <Panel position="bottom-center">
           <div className="flex items-center gap-4 rounded-xl border border-zinc-700/50 bg-zinc-900/90 px-4 py-2 text-[10px] shadow-xl backdrop-blur-sm">
             {[

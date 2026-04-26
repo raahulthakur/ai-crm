@@ -1,8 +1,9 @@
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
 import { ArrowLeft, TrendingUp, TrendingDown, AlertTriangle } from 'lucide-react'
 import { useDealStore } from '@/store'
 import { OrgChartCanvas } from '@/components/org-chart/OrgChartCanvas'
+import { ContactModal } from '@/components/org-chart/ContactModal'
 import { AIInsightsPanel } from '@/components/deal-room/AIInsightsPanel'
 import { RecommendedActions } from '@/components/deal-room/RecommendedActions'
 import { ActivityTimeline } from '@/components/deal-room/ActivityTimeline'
@@ -10,15 +11,20 @@ import { WhatsAppModal } from '@/components/whatsapp/WhatsAppModal'
 import { HealthScoreBadge } from '@/components/shared/HealthScoreBadge'
 import { formatCurrency } from '@/lib/utils'
 import { dealContacts } from '@/data/mockData'
+import type { DealContact } from '@/types'
 
-const DELTA_TOOLTIPS: Record<string, string> = {
-  '-4': 'CFO hasn\'t responded since 12 days',
+// Reasons for score changes — positive and negative
+const DELTA_TOOLTIPS: Record<string, { label: string; reason: string }> = {
+  '-4':  { label: 'Why did it drop?',     reason: 'CFO hasn\'t responded in 12 days — engagement score penalty applied.' },
+  '22':  { label: 'Why did it jump?',     reason: 'CFO Rahul Mehta approved the budget — primary financial blocker removed.' },
+  '+22': { label: 'Why did it jump?',     reason: 'CFO Rahul Mehta approved the budget — primary financial blocker removed.' },
 }
 
 export function DealRoomPage() {
   const { id } = useParams<{ id: string }>()
   const { deals, activeDeal, setActiveDeal } = useDealStore()
   const navigate = useNavigate()
+  const [selectedContact, setSelectedContact] = useState<DealContact | null>(null)
 
   useEffect(() => {
     if (!activeDeal) {
@@ -32,13 +38,13 @@ export function DealRoomPage() {
 
   const scoreDelta = deal.health_score_prev != null ? deal.health_score - deal.health_score_prev : null
   const deltaKey = scoreDelta != null ? String(scoreDelta) : ''
-  const deltaTooltip = DELTA_TOOLTIPS[deltaKey] ?? (scoreDelta != null && scoreDelta < 0 ? 'Score dropped recently' : undefined)
+  const deltaInfo = DELTA_TOOLTIPS[deltaKey] ?? DELTA_TOOLTIPS[`+${deltaKey}`]
   const myContacts = dealContacts.filter((dc) => dc.deal_id === deal.id)
 
   return (
     <div className="flex h-full flex-col overflow-hidden bg-zinc-950">
       {/* Deal header */}
-      <div className="flex items-center gap-3 border-b border-zinc-800 bg-zinc-900/70 px-5 py-3 backdrop-blur-sm">
+      <div className="flex items-center gap-3 border-b border-zinc-800 bg-zinc-900 px-5 py-3">
         <button onClick={() => navigate('/deals')}
           className="rounded-lg p-1.5 text-zinc-600 transition-colors hover:bg-zinc-800 hover:text-zinc-300">
           <ArrowLeft className="h-4 w-4" />
@@ -59,16 +65,23 @@ export function DealRoomPage() {
 
           <div className="flex items-center gap-2 shrink-0">
             <HealthScoreBadge score={deal.health_score} />
+
             {scoreDelta != null && (
               <div className="group relative">
-                <span className={`flex cursor-help items-center gap-0.5 font-mono text-xs font-semibold underline decoration-dotted underline-offset-2 ${scoreDelta >= 0 ? 'text-emerald-400 decoration-emerald-400/40' : 'text-rose-400 decoration-rose-400/40'}`}>
+                <span className={`flex cursor-help items-center gap-0.5 font-mono text-xs font-semibold underline decoration-dotted underline-offset-2 ${
+                  scoreDelta >= 0 ? 'text-emerald-400 decoration-emerald-400/40' : 'text-rose-400 decoration-rose-400/40'
+                }`}>
                   {scoreDelta >= 0 ? <TrendingUp className="h-3 w-3" /> : <TrendingDown className="h-3 w-3" />}
                   {scoreDelta > 0 ? '+' : ''}{scoreDelta}%
                 </span>
-                {deltaTooltip && (
-                  <div className="pointer-events-none invisible absolute top-full right-0 z-50 mt-2 w-52 rounded-lg border border-zinc-700 bg-zinc-900 px-2.5 py-2 text-[11px] text-zinc-300 shadow-xl group-hover:visible">
-                    <p className="font-semibold text-rose-400 mb-0.5">Why did it drop?</p>
-                    {deltaTooltip}
+
+                {/* Tooltip below */}
+                {deltaInfo && (
+                  <div className="pointer-events-none invisible absolute top-full right-0 z-[200] mt-2 w-60 rounded-xl border border-zinc-700 bg-zinc-900 px-3 py-2.5 shadow-2xl group-hover:visible animate-fade-in">
+                    <p className={`text-[10px] font-bold uppercase tracking-wider mb-1 ${scoreDelta >= 0 ? 'text-emerald-400' : 'text-rose-400'}`}>
+                      {deltaInfo.label}
+                    </p>
+                    <p className="text-[11px] text-zinc-300 leading-relaxed">{deltaInfo.reason}</p>
                   </div>
                 )}
               </div>
@@ -79,15 +92,18 @@ export function DealRoomPage() {
 
       {/* Main layout */}
       <div className="flex flex-1 overflow-hidden">
+        {/* Org chart */}
         <div className="flex w-[54%] flex-col border-r border-zinc-800 overflow-hidden">
-          <div className="border-b border-zinc-800 bg-zinc-900/30 px-4 py-2">
+          <div className="border-b border-zinc-800 bg-zinc-900/30 px-4 py-2 flex items-center justify-between">
             <h3 className="text-[10px] font-semibold uppercase tracking-widest text-zinc-600">Buying Committee</h3>
+            <span className="text-[10px] text-zinc-700">Click a contact for details</span>
           </div>
           <div className="flex-1">
-            <OrgChartCanvas dealContacts={myContacts} />
+            <OrgChartCanvas dealContacts={myContacts} onContactSelect={setSelectedContact} />
           </div>
         </div>
 
+        {/* Right panel */}
         <div className="flex w-[46%] flex-col overflow-hidden">
           <div className="flex-1 overflow-y-auto">
             <div className="p-4 space-y-5">
@@ -104,6 +120,11 @@ export function DealRoomPage() {
       </div>
 
       <WhatsAppModal />
+
+      {/* Contact detail modal */}
+      {selectedContact && (
+        <ContactModal dc={selectedContact} onClose={() => setSelectedContact(null)} />
+      )}
     </div>
   )
 }

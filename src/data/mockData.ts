@@ -3,18 +3,18 @@ import type { Deal, Contact, DealContact, Activity, AIInsight, AIRecommendedActi
 export const DEAL_ID = 'abc-corp-deal-001'
 
 export const contacts: Contact[] = [
-  { id: 'c001', full_name: 'Vikram Anand',  job_title: 'CEO',             company_name: 'ABC Corp', email: 'vikram@abccorp.com',          avatar_url: 'https://i.pravatar.cc/150?img=52' },
-  { id: 'c002', full_name: 'Rahul Mehta',   job_title: 'CFO',             company_name: 'ABC Corp', email: 'rahul.mehta@abccorp.com',     avatar_url: 'https://i.pravatar.cc/150?img=12', phone: '+919876543210', last_contacted_at: new Date(Date.now() - 12 * 86400000).toISOString() },
-  { id: 'c003', full_name: 'Priya Sharma',  job_title: 'VP Marketing',    company_name: 'ABC Corp', email: 'priya@abccorp.com',           avatar_url: 'https://i.pravatar.cc/150?img=44', phone: '+919123456789', last_contacted_at: new Date(Date.now() - 2 * 86400000).toISOString() },
-  { id: 'c004', full_name: 'Amit Singh',    job_title: 'Team Lead',       company_name: 'ABC Corp', email: 'amit@abccorp.com',            avatar_url: 'https://i.pravatar.cc/150?img=15', last_contacted_at: new Date(Date.now() - 5 * 86400000).toISOString() },
-  { id: 'c005', full_name: 'Neha Kapoor',   job_title: 'IT Security Lead', company_name: 'ABC Corp', email: 'security@abccorp.com',       avatar_url: 'https://i.pravatar.cc/150?img=47', last_contacted_at: new Date(Date.now() - 5 * 86400000).toISOString() },
+  { id: 'c001', full_name: 'Vikram Anand', job_title: 'CEO', company_name: 'Razorpay', email: 'vikram@razorpay.com', avatar_url: 'https://i.pravatar.cc/150?img=52', phone: '+91-9818-765432' },
+  { id: 'c002', full_name: 'Rahul Mehta', job_title: 'CFO', company_name: 'Razorpay', email: 'rahul.mehta@razorpay.com', avatar_url: 'https://i.pravatar.cc/150?img=12', phone: '+91-9876-543210', last_contacted_at: new Date(Date.now() - 12 * 86400000).toISOString() },
+  { id: 'c003', full_name: 'Priya Sharma', job_title: 'VP Marketing', company_name: 'Razorpay', email: 'priya@razorpay.com', avatar_url: 'https://i.pravatar.cc/150?img=44', phone: '+91-9123-456789', last_contacted_at: new Date(Date.now() - 2 * 86400000).toISOString() },
+  { id: 'c004', full_name: 'Amit Singh', job_title: 'Team Lead', company_name: 'Razorpay', email: 'amit@razorpay.com', avatar_url: 'https://i.pravatar.cc/150?img=15', phone: '+91-9954-321098', last_contacted_at: new Date(Date.now() - 5 * 86400000).toISOString() },
+  { id: 'c005', full_name: 'Neha Kapoor', job_title: 'IT Security Lead', company_name: 'Razorpay', email: 'security@razorpay.com', avatar_url: 'https://i.pravatar.cc/150?img=47', phone: '+91-9555-123456', last_contacted_at: new Date(Date.now() - 5 * 86400000).toISOString() },
 ]
 
 export const deals: Deal[] = [
   {
     id: DEAL_ID,
-    name: 'ABC Corp - Enterprise',
-    company_name: 'ABC Corp',
+    name: 'Razorpay - Enterprise',
+    company_name: 'Razorpay',
     arr_value: 50000,
     stage: 'negotiation',
     health_score: 68,
@@ -28,9 +28,9 @@ export const deals: Deal[] = [
     updated_at: new Date(Date.now() - 12 * 86400000).toISOString(),
   },
   {
-    id: 'xyz-inc-002',
-    name: 'XYZ Inc - Growth',
-    company_name: 'XYZ Inc',
+    id: 'swiggy-002',
+    name: 'Swiggy - Growth',
+    company_name: 'Swiggy',
     arr_value: 35000,
     stage: 'proposal',
     health_score: 89,
@@ -42,9 +42,9 @@ export const deals: Deal[] = [
     updated_at: new Date(Date.now() - 2 * 86400000).toISOString(),
   },
   {
-    id: 'mno-corp-003',
-    name: 'MNO Corp - Starter',
-    company_name: 'MNO Corp',
+    id: 'juspay-003',
+    name: 'Juspay - Starter',
+    company_name: 'Juspay',
     arr_value: 40000,
     stage: 'qualification',
     health_score: 45,
@@ -55,9 +55,9 @@ export const deals: Deal[] = [
     updated_at: new Date(Date.now() - 5 * 86400000).toISOString(),
   },
   {
-    id: 'pqr-ltd-004',
-    name: 'PQR Ltd - Enterprise',
-    company_name: 'PQR Ltd',
+    id: 'groww-004',
+    name: 'Groww - Enterprise',
+    company_name: 'Groww',
     arr_value: 75000,
     stage: 'negotiation',
     health_score: 62,
@@ -88,7 +88,7 @@ export const activities: Activity[] = [
     title: 'CFO response on pricing',
     description: '"Pricing looks steep, need to see ROI before approving budget"',
     occurred_at: new Date(Date.now() - 12 * 86400000).toISOString(),
-    created_by: 'rahul.mehta@abccorp.com',
+    created_by: 'rahul.mehta@razorpay.com',
     contact: contacts[1],
   },
   {
@@ -99,7 +99,7 @@ export const activities: Activity[] = [
     title: 'Priya WhatsApp — team loves it',
     description: '"Team loves this! Just need CFO and IT Security approval"',
     occurred_at: new Date(Date.now() - 14 * 86400000).toISOString(),
-    created_by: 'priya@abccorp.com',
+    created_by: 'priya@razorpay.com',
     contact: contacts[2],
   },
   {
@@ -110,7 +110,7 @@ export const activities: Activity[] = [
     title: 'IT Security — DPDP compliance required',
     description: 'Need DPDP compliance certificate before any data processing approval',
     occurred_at: new Date(Date.now() - 18 * 86400000).toISOString(),
-    created_by: 'security@abccorp.com',
+    created_by: 'security@razorpay.com',
     contact: contacts[4],
   },
   {
@@ -144,6 +144,28 @@ export const activities: Activity[] = [
     occurred_at: new Date(Date.now() - 1 * 86400000).toISOString(),
     created_by: 'ai_system',
     metadata: { score_before: 72, score_after: 68 },
+  },
+  {
+    id: 'act007',
+    deal_id: DEAL_ID,
+    contact_id: 'c002',
+    type: 'meeting_booked',
+    title: 'Meeting booked with CFO Rahul Mehta',
+    description: 'ROI discussion call — 30 min on Apr 28 at 11:00 AM via Google Meet',
+    occurred_at: new Date(Date.now() - 3 * 86400000).toISOString(),
+    created_by: 'rahulthakur@nexusai.com',
+    contact: contacts[1],
+  },
+  {
+    id: 'act008',
+    deal_id: DEAL_ID,
+    contact_id: 'c005',
+    type: 'email_sent',
+    title: 'DPDP compliance email sent to Neha Kapoor',
+    description: 'Forwarded DPDP certification documents to IT Security Lead for review and sign-off',
+    occurred_at: new Date(Date.now() - 4 * 86400000).toISOString(),
+    created_by: 'rahulthakur@nexusai.com',
+    contact: contacts[4],
   },
 ]
 
@@ -238,7 +260,7 @@ export const documents: Document[] = [
   {
     id: 'doc002',
     deal_id: DEAL_ID,
-    name: 'Superleap_Proposal_ABCCorp_v2.pdf',
+    name: 'Superleap_Proposal_razorpay_v2.pdf',
     type: 'proposal',
     sent_to: ['c002'],
     sent_at: new Date(Date.now() - 20 * 86400000).toISOString(),

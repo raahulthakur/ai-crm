@@ -5,12 +5,12 @@ import type { DealContact } from '@/types'
 import { getInitials, cn } from '@/lib/utils'
 
 const STATUS_RING: Record<string, string> = {
-  champion: 'ring-2 ring-emerald-400/70',
-  blocked: 'ring-2 ring-rose-400/70',
+  champion:      'ring-2 ring-emerald-400/70',
+  blocked:       'ring-2 ring-rose-400/70',
   not_contacted: 'ring-2 ring-zinc-600/50',
-  neutral: 'ring-2 ring-blue-400/50',
-  engaged: 'ring-2 ring-blue-400/70',
-  unresponsive: 'ring-2 ring-amber-400/60',
+  neutral:       'ring-2 ring-blue-400/50',
+  engaged:       'ring-2 ring-blue-400/70',
+  unresponsive:  'ring-2 ring-amber-400/60',
 }
 
 const AVATAR_COLORS: Record<string, { bg: string; text: string }> = {
@@ -31,10 +31,14 @@ const STATUS_LABELS: Record<string, { text: string; color: string }> = {
   unresponsive:  { text: 'Unresponsive',  color: 'text-amber-400' },
 }
 
-interface NodeData { dealContact: DealContact; [key: string]: unknown }
+interface NodeData {
+  dealContact: DealContact
+  onSelect: (dc: DealContact) => void
+  [key: string]: unknown
+}
 
 export const ContactNode = memo(({ data }: { data: NodeData }) => {
-  const { dealContact } = data
+  const { dealContact, onSelect } = data
   const { contact, status, is_key_blocker, is_champion } = dealContact
   const colors = AVATAR_COLORS[status] ?? AVATAR_COLORS.not_contacted
   const statusInfo = STATUS_LABELS[status] ?? STATUS_LABELS.not_contacted
@@ -43,24 +47,25 @@ export const ContactNode = memo(({ data }: { data: NodeData }) => {
     : null
 
   return (
-    <div className={cn('w-[165px] rounded-2xl border border-zinc-700/40 bg-zinc-900 px-3 py-3 transition-all hover:border-zinc-600 hover:shadow-lg', STATUS_RING[status])}>
+    <div
+      onClick={() => onSelect(dealContact)}
+      className={cn(
+        'w-[165px] cursor-pointer rounded-2xl border border-zinc-700/40 bg-zinc-900 px-3 py-3 transition-all hover:border-zinc-500 hover:shadow-xl hover:scale-[1.02]',
+        STATUS_RING[status]
+      )}>
       <Handle type="target" position={Position.Top} className="!border-0 !bg-zinc-700 !h-1.5 !w-1.5 !opacity-60" />
 
       {/* Profile pic */}
       <div className="mb-2.5 flex items-center gap-2.5">
         {contact.avatar_url ? (
-          <img
-            src={contact.avatar_url}
-            alt={contact.full_name}
+          <img src={contact.avatar_url} alt={contact.full_name}
             className="h-10 w-10 shrink-0 rounded-full object-cover border-2"
             style={{ borderColor: colors.text + '50' }}
-            onError={(e) => { (e.target as HTMLImageElement).style.display = 'none' }}
-          />
+            onError={(e) => { (e.target as HTMLImageElement).style.display = 'none' }} />
         ) : (
           <div
             className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full text-sm font-display font-bold border-2"
-            style={{ background: colors.bg, color: colors.text, borderColor: colors.text + '40' }}
-          >
+            style={{ background: colors.bg, color: colors.text, borderColor: colors.text + '40' }}>
             {getInitials(contact.full_name)}
           </div>
         )}
@@ -83,6 +88,9 @@ export const ContactNode = memo(({ data }: { data: NodeData }) => {
           </span>
         )}
       </div>
+
+      {/* Click hint */}
+      <p className="mt-1.5 text-[9px] text-zinc-700 text-center">Click for details</p>
 
       <Handle type="source" position={Position.Bottom} className="!border-0 !bg-zinc-700 !h-1.5 !w-1.5 !opacity-60" />
     </div>

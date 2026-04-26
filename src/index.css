@@ -59,6 +59,11 @@
 /* React Flow */
 .react-flow { background: #092428 !important; }
 .react-flow__background { background: #092428 !important; }
+/* Suppress selection overlays and focus rings on nodes */
+.react-flow__nodesselection-rect { display: none !important; }
+.react-flow__selection { display: none !important; }
+.react-flow__node:focus { outline: none !important; box-shadow: none !important; }
+.react-flow__node.selected { box-shadow: none !important; }
 .react-flow__controls button {
   background: #153C43 !important;
   border-color: #1E4D56 !important;

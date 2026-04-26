@@ -78,21 +78,31 @@ export const useAIStore = create<AIState>((set) => ({
         { id: 'ins-post3', deal_id: 'abc-corp-deal-001', category: 'timeline', title: 'Close this week if DPDP sent today', body: 'Based on deal velocity and stakeholder engagement, closing is achievable by Friday if compliance docs are sent immediately.', confidence: 81, model_used: 'groq/llama-3.3-70b-versatile', is_dismissed: false, is_actioned: false, generated_at: new Date().toISOString() },
       ],
       actions: [
-        { id: 'post-action1', deal_id: 'abc-corp-deal-001', priority: 'critical' as const, title: 'Book ROI call with CFO Rahul', description: 'Priya confirmed CFO approved. Book a 30-min call with Rahul to thank him and align on implementation timeline.', action_type: 'book_meeting', target_contact_id: 'c002', is_completed: false, target_contact: { id: 'c002', full_name: 'Rahul Mehta', job_title: 'CFO', company_name: 'ABC Corp', email: 'rahul.mehta@abccorp.com' } },
-        { id: 'post-action2', deal_id: 'abc-corp-deal-001', priority: 'critical' as const, title: 'Send DPDP compliance to all 3 stakeholders', description: 'Send DPDP_compliance_doc.pdf to Priya, Rahul, and IT Security to clear final blocker.', action_type: 'send_doc', target_contact_id: 'c005', is_completed: false, target_contact: { id: 'c005', full_name: 'Neha Kapoor', job_title: 'IT Security Lead', company_name: 'ABC Corp' } },
+        { id: 'post-action1', deal_id: 'abc-corp-deal-001', priority: 'critical' as const, title: 'Book ROI call with CFO Rahul', description: 'Priya confirmed CFO approved. Book a 30-min call with Rahul to thank him and align on implementation timeline.', action_type: 'book_meeting', target_contact_id: 'c002', is_completed: false, target_contact: { id: 'c002', full_name: 'Rahul Mehta', job_title: 'CFO', company_name: 'Razorpay', email: 'rahul.mehta@razorpay.com' } },
+        { id: 'post-action2', deal_id: 'abc-corp-deal-001', priority: 'critical' as const, title: 'Send DPDP compliance to all 3 stakeholders', description: 'Send DPDP_compliance_doc.pdf to Priya, Rahul, and IT Security to clear final blocker.', action_type: 'send_doc', target_contact_id: 'c005', is_completed: false, target_contact: { id: 'c005', full_name: 'Neha Kapoor', job_title: 'IT Security Lead', company_name: 'Razorpay' } },
       ],
     }),
 }))
+
+export interface AppToast {
+  id: string
+  type: 'gmail' | 'calendar'
+  title: string
+  subtitle: string
+}
 
 interface UIState {
   whatsAppModalOpen: boolean
   whatsAppTarget: Contact | null
   sendDocModalOpen: boolean
   sendDocActionId: string | null
+  toasts: AppToast[]
   openWhatsAppModal: (contact: Contact) => void
   closeWhatsAppModal: () => void
   openSendDocModal: (actionId: string) => void
   closeSendDocModal: () => void
+  addToast: (t: Omit<AppToast, 'id'>) => void
+  removeToast: (id: string) => void
 }
 
 export const useUIStore = create<UIState>((set) => ({
@@ -100,10 +110,17 @@ export const useUIStore = create<UIState>((set) => ({
   whatsAppTarget: null,
   sendDocModalOpen: false,
   sendDocActionId: null,
+  toasts: [],
   openWhatsAppModal: (contact) => set({ whatsAppModalOpen: true, whatsAppTarget: contact }),
   closeWhatsAppModal: () => set({ whatsAppModalOpen: false, whatsAppTarget: null }),
   openSendDocModal: (actionId) => set({ sendDocModalOpen: true, sendDocActionId: actionId }),
   closeSendDocModal: () => set({ sendDocModalOpen: false, sendDocActionId: null }),
+  addToast: (t) => {
+    const id = `toast-${Date.now()}`
+    set((s) => ({ toasts: [...s.toasts, { ...t, id }] }))
+    setTimeout(() => set((s) => ({ toasts: s.toasts.filter((x) => x.id !== id) })), 4500)
+  },
+  removeToast: (id) => set((s) => ({ toasts: s.toasts.filter((x) => x.id !== id) })),
 }))
 
 interface MessageState {

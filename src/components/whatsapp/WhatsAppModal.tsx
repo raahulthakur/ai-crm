@@ -1,10 +1,18 @@
-import { useEffect, useState } from 'react'
-import { useNavigate } from 'react-router-dom'
-import { MessageSquare, Edit3, X, Send, Bot, Loader2, RefreshCw } from 'lucide-react'
-import { useUIStore, useAIStore, useMessageStore, useDealStore } from '@/store'
-import { Avatar } from '@/components/shared/Avatar'
-import { draftWhatsAppMessage } from '@/lib/groq'
-import { DEAL_ID } from '@/data/mockData'
+import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import {
+  MessageSquare,
+  Edit3,
+  X,
+  Send,
+  Bot,
+  Loader2,
+  RefreshCw,
+} from 'lucide-react';
+import { useUIStore, useAIStore, useMessageStore, useDealStore } from '@/store';
+import { Avatar } from '@/components/shared/Avatar';
+import { draftWhatsAppMessage } from '@/lib/groq';
+import { DEAL_ID } from '@/data/mockData';
 
 const VARIATIONS = [
   `Hi Priya,
@@ -23,31 +31,33 @@ Also wanted to let you know our DPDP compliance docs are ready for IT Security w
 
   `Hey Priya,
 
-Following up on the ABC Corp proposal. Has Rahul had a chance to review the budget? We're excited to get started.
+Following up on the Razorpay proposal. Has Rahul had a chance to review the budget? We're excited to get started.
 
 Also wanted to mention — DPDP compliance documentation is all set for the IT Security team. Just say the word and I'll send it over.`,
-]
+];
 
 export function WhatsAppModal() {
-  const { whatsAppModalOpen, whatsAppTarget, closeWhatsAppModal } = useUIStore()
-  const { setDraftedMessage, setGeneratingMessage, isGeneratingMessage } = useAIStore()
-  const { appendMessage, initPriyaConversation } = useMessageStore()
-  const { activeDeal } = useDealStore()
-  const navigate = useNavigate()
+  const { whatsAppModalOpen, whatsAppTarget, closeWhatsAppModal } =
+    useUIStore();
+  const { setDraftedMessage, setGeneratingMessage, isGeneratingMessage } =
+    useAIStore();
+  const { appendMessage, initPriyaConversation } = useMessageStore();
+  const { activeDeal } = useDealStore();
+  const navigate = useNavigate();
 
-  const [variationIdx, setVariationIdx] = useState(0)
-  const [editedMessage, setEditedMessage] = useState('')
-  const [isEditing, setIsEditing] = useState(false)
-  const [isRegenerating, setIsRegenerating] = useState(false)
+  const [variationIdx, setVariationIdx] = useState(0);
+  const [editedMessage, setEditedMessage] = useState('');
+  const [isEditing, setIsEditing] = useState(false);
+  const [isRegenerating, setIsRegenerating] = useState(false);
 
   useEffect(() => {
-    if (!whatsAppModalOpen || !whatsAppTarget || !activeDeal) return
-    setVariationIdx(0)
-    setEditedMessage(VARIATIONS[0])
-    setIsEditing(false)
+    if (!whatsAppModalOpen || !whatsAppTarget || !activeDeal) return;
+    setVariationIdx(0);
+    setEditedMessage(VARIATIONS[0]);
+    setIsEditing(false);
 
     if (import.meta.env.VITE_GROQ_API_KEY) {
-      setGeneratingMessage(true)
+      setGeneratingMessage(true);
       draftWhatsAppMessage({
         contactName: whatsAppTarget.full_name,
         contactRole: whatsAppTarget.job_title ?? 'Contact',
@@ -55,25 +65,31 @@ export function WhatsAppModal() {
         arrValue: `$${(activeDeal.arr_value / 1000).toFixed(0)}K`,
         stuckReason: activeDeal.stuck_reason ?? 'deal stalled',
         lastActivity: '12 days ago',
-      }).then((msg) => {
-        if (msg) { setDraftedMessage(msg); setEditedMessage(msg) }
-      }).catch(() => {}).finally(() => setGeneratingMessage(false))
+      })
+        .then((msg) => {
+          if (msg) {
+            setDraftedMessage(msg);
+            setEditedMessage(msg);
+          }
+        })
+        .catch(() => {})
+        .finally(() => setGeneratingMessage(false));
     }
-  }, [whatsAppModalOpen, whatsAppTarget?.id])
+  }, [whatsAppModalOpen, whatsAppTarget?.id]);
 
   function handleRegenerate() {
-    setIsRegenerating(true)
+    setIsRegenerating(true);
     setTimeout(() => {
-      const next = (variationIdx + 1) % VARIATIONS.length
-      setVariationIdx(next)
-      setEditedMessage(VARIATIONS[next])
-      setIsRegenerating(false)
-    }, 500)
+      const next = (variationIdx + 1) % VARIATIONS.length;
+      setVariationIdx(next);
+      setEditedMessage(VARIATIONS[next]);
+      setIsRegenerating(false);
+    }, 500);
   }
 
   function handleSend() {
-    if (!whatsAppTarget) return
-    initPriyaConversation()
+    if (!whatsAppTarget) return;
+    initPriyaConversation();
     appendMessage({
       id: `msg-out-${Date.now()}`,
       deal_id: DEAL_ID,
@@ -84,100 +100,129 @@ export function WhatsAppModal() {
       body: editedMessage,
       ai_drafted: true,
       sent_at: new Date().toISOString(),
-    })
-    closeWhatsAppModal()
-    navigate(`/deals/${DEAL_ID}/conversation`)
+    });
+    closeWhatsAppModal();
+    navigate(`/deals/${DEAL_ID}/conversation`);
   }
 
-  if (!whatsAppModalOpen || !whatsAppTarget) return null
+  if (!whatsAppModalOpen || !whatsAppTarget) return null;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/75 backdrop-blur-sm">
-      <div className="mx-4 w-full max-w-md rounded-2xl border border-zinc-700/50 bg-zinc-900 shadow-2xl animate-bounce-in">
+    <div className='fixed inset-0 z-50 flex items-center justify-center bg-black/75 backdrop-blur-sm'>
+      <div className='mx-4 w-full max-w-md rounded-2xl border border-zinc-700/50 bg-zinc-900 shadow-2xl animate-bounce-in'>
         {/* Header */}
-        <div className="flex items-center justify-between border-b border-zinc-800 px-5 py-4">
-          <div className="flex items-center gap-2.5">
-            <div className="flex h-7 w-7 items-center justify-center rounded-full bg-emerald-500/20 border border-emerald-500/30">
-              <MessageSquare className="h-3.5 w-3.5 text-emerald-400" />
+        <div className='flex items-center justify-between border-b border-zinc-800 px-5 py-4'>
+          <div className='flex items-center gap-2.5'>
+            <div className='flex h-7 w-7 items-center justify-center rounded-full bg-emerald-500/20 border border-emerald-500/30'>
+              <MessageSquare className='h-3.5 w-3.5 text-emerald-400' />
             </div>
             <div>
-              <p className="font-display text-sm font-600 text-zinc-50">WhatsApp Follow-Up</p>
-              <p className="text-[11px] text-zinc-600">AI Recommended Action</p>
+              <p className='font-display text-sm font-600 text-zinc-50'>
+                WhatsApp Follow-Up
+              </p>
+              <p className='text-[11px] text-zinc-600'>AI Recommended Action</p>
             </div>
           </div>
-          <button onClick={closeWhatsAppModal}
-            className="rounded-lg p-1 text-zinc-600 hover:text-zinc-300 transition-colors">
-            <X className="h-4 w-4" />
+          <button
+            onClick={closeWhatsAppModal}
+            className='rounded-lg p-1 text-zinc-600 hover:text-zinc-300 transition-colors'
+          >
+            <X className='h-4 w-4' />
           </button>
         </div>
 
         {/* To */}
-        <div className="border-b border-zinc-800 px-5 py-3">
-          <p className="mb-2 text-[10px] font-semibold uppercase tracking-widest text-zinc-600">To</p>
-          <div className="flex items-center gap-3">
-            <Avatar name={whatsAppTarget.full_name} imageUrl={whatsAppTarget.avatar_url} size="lg" />
+        <div className='border-b border-zinc-800 px-5 py-3'>
+          <p className='mb-2 text-[10px] font-semibold uppercase tracking-widest text-zinc-600'>
+            To
+          </p>
+          <div className='flex items-center gap-3'>
+            <Avatar
+              name={whatsAppTarget.full_name}
+              imageUrl={whatsAppTarget.avatar_url}
+              size='lg'
+            />
             <div>
-              <p className="text-sm font-semibold text-zinc-100">{whatsAppTarget.full_name}</p>
-              <p className="text-[11px] text-zinc-500">{whatsAppTarget.job_title} · ABC Corp</p>
-              <p className="text-[11px] font-medium text-emerald-400">Champion — can nudge CFO internally</p>
+              <p className='text-sm font-semibold text-zinc-100'>
+                {whatsAppTarget.full_name}
+              </p>
+              <p className='text-[11px] text-zinc-500'>
+                {whatsAppTarget.job_title} · Razorpay
+              </p>
+              <p className='text-[11px] font-medium text-emerald-400'>
+                Champion — can nudge CFO internally
+              </p>
             </div>
           </div>
         </div>
 
         {/* Draft */}
-        <div className="px-5 py-4">
-          <div className="mb-2 flex items-center justify-between">
-            <div className="flex items-center gap-1.5">
-              <Bot className="h-3.5 w-3.5 text-blue-400" />
-              <p className="text-xs font-semibold text-zinc-400">AI Draft</p>
-              <span className="font-mono text-[10px] text-zinc-700">
-                {variationIdx + 1} / {VARIATIONS.length}
-              </span>
+        <div className='px-5 py-4'>
+          <div className='mb-2 flex items-center justify-between'>
+            <div className='flex items-center gap-1.5'>
+              <Bot className='h-3.5 w-3.5 text-blue-400' />
+              <p className='text-xs font-semibold text-zinc-400'>AI Draft</p>
             </div>
-            <div className="flex items-center gap-2">
-              <button onClick={handleRegenerate} disabled={isRegenerating || isGeneratingMessage}
-                className="flex items-center gap-1 text-[11px] text-blue-400 hover:text-blue-300 transition-colors disabled:opacity-40">
-                <RefreshCw className={`h-3 w-3 ${isRegenerating ? 'animate-spin' : ''}`} />
+            <div className='flex items-center gap-2'>
+              <button
+                onClick={handleRegenerate}
+                disabled={isRegenerating || isGeneratingMessage}
+                className='flex items-center gap-1 text-[11px] text-blue-400 hover:text-blue-300 transition-colors disabled:opacity-40'
+              >
+                <RefreshCw
+                  className={`h-3 w-3 ${isRegenerating ? 'animate-spin' : ''}`}
+                />
                 Regenerate
               </button>
-              <span className="text-zinc-800">|</span>
-              <button onClick={() => setIsEditing(!isEditing)}
-                className="flex items-center gap-1 text-[11px] text-zinc-500 hover:text-zinc-300 transition-colors">
-                <Edit3 className="h-3 w-3" />
+              <span className='text-zinc-800'>|</span>
+              <button
+                onClick={() => setIsEditing(!isEditing)}
+                className='flex items-center gap-1 text-[11px] text-zinc-500 hover:text-zinc-300 transition-colors'
+              >
+                <Edit3 className='h-3 w-3' />
                 {isEditing ? 'Done' : 'Edit'}
               </button>
             </div>
           </div>
 
           {isGeneratingMessage || isRegenerating ? (
-            <div className="flex items-center gap-2.5 rounded-xl border border-zinc-800 bg-zinc-800/50 p-4 text-sm text-zinc-500">
-              <Loader2 className="h-4 w-4 animate-spin text-blue-400" />
-              {isRegenerating ? 'Loading next variation…' : 'AI drafting message…'}
+            <div className='flex items-center gap-2.5 rounded-xl border border-zinc-800 bg-zinc-800/50 p-4 text-sm text-zinc-500'>
+              <Loader2 className='h-4 w-4 animate-spin text-blue-400' />
+              {isRegenerating
+                ? 'Loading next variation…'
+                : 'AI drafting message…'}
             </div>
           ) : isEditing ? (
-            <textarea value={editedMessage} onChange={(e) => setEditedMessage(e.target.value)}
+            <textarea
+              value={editedMessage}
+              onChange={(e) => setEditedMessage(e.target.value)}
               rows={7}
-              className="w-full rounded-xl border border-zinc-700 bg-zinc-800 p-3 text-sm text-zinc-200 placeholder-zinc-700 outline-none focus:border-amber-400/40 focus:ring-1 focus:ring-amber-400/20 resize-none transition-colors font-body"
+              className='w-full rounded-xl border border-zinc-700 bg-zinc-800 p-3 text-sm text-zinc-200 placeholder-zinc-700 outline-none focus:border-amber-400/40 focus:ring-1 focus:ring-amber-400/20 resize-none transition-colors font-body'
             />
           ) : (
-            <div className="min-h-[120px] rounded-xl border border-emerald-500/20 bg-emerald-500/5 p-3 text-sm text-zinc-200 whitespace-pre-line leading-relaxed">
+            <div className='min-h-[120px] rounded-xl border border-emerald-500/20 bg-emerald-500/5 p-3 text-sm text-zinc-200 whitespace-pre-line leading-relaxed'>
               {editedMessage}
             </div>
           )}
         </div>
 
         {/* Actions */}
-        <div className="flex gap-2 border-t border-zinc-800 px-5 py-4">
-          <button onClick={closeWhatsAppModal}
-            className="flex-1 rounded-lg border border-zinc-700 py-2 text-sm font-medium text-zinc-500 hover:border-zinc-600 hover:text-zinc-300 transition-colors">
+        <div className='flex gap-2 border-t border-zinc-800 px-5 py-4'>
+          <button
+            onClick={closeWhatsAppModal}
+            className='flex-1 rounded-lg border border-zinc-700 py-2 text-sm font-medium text-zinc-500 hover:border-zinc-600 hover:text-zinc-300 transition-colors'
+          >
             Skip
           </button>
-          <button onClick={handleSend} disabled={isGeneratingMessage}
-            className="flex flex-1 items-center justify-center gap-2 rounded-lg bg-emerald-600 py-2 text-sm font-semibold text-white hover:bg-emerald-500 disabled:opacity-50 transition-colors">
-            <Send className="h-3.5 w-3.5" /> Send Now
+          <button
+            onClick={handleSend}
+            disabled={isGeneratingMessage}
+            className='flex flex-1 items-center justify-center gap-2 rounded-lg bg-emerald-600 py-2 text-sm font-semibold text-white hover:bg-emerald-500 disabled:opacity-50 transition-colors'
+          >
+            <Send className='h-3.5 w-3.5' /> Send Now
           </button>
         </div>
       </div>
     </div>
-  )
+  );
 }

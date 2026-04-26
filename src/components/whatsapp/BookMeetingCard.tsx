@@ -1,6 +1,6 @@
 import { useState } from 'react'
-import { Calendar, CheckCircle2, Mail, Loader2 } from 'lucide-react'
-import { useAIStore } from '@/store'
+import { Calendar, Loader2 } from 'lucide-react'
+import { useAIStore, useUIStore, useActivityStore } from '@/store'
 import { cn } from '@/lib/utils'
 
 const SLOTS = [
@@ -9,37 +9,64 @@ const SLOTS = [
   { day: 'Wed, Apr 30', slots: ['9:00 AM', '1:00 PM'] },
 ]
 
+function CalendarIcon() {
+  return (
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <rect x="3" y="4" width="18" height="18" rx="3" fill="#1a73e8"/>
+      <rect x="3" y="4" width="18" height="7" rx="3" fill="#1a73e8"/>
+      <rect x="3" y="8" width="18" height="3" fill="#1a73e8"/>
+      <text x="12" y="19" textAnchor="middle" fill="white" fontSize="8" fontWeight="bold" fontFamily="sans-serif">28</text>
+      <line x1="8" y1="2" x2="8" y2="7" stroke="#1a73e8" strokeWidth="2" strokeLinecap="round"/>
+      <line x1="16" y1="2" x2="16" y2="7" stroke="#1a73e8" strokeWidth="2" strokeLinecap="round"/>
+    </svg>
+  )
+}
+
 interface Props { actionId: string; contactName: string; contactEmail: string }
 type State = 'picking' | 'scheduling' | 'booked'
 
 export function BookMeetingCard({ actionId, contactName, contactEmail }: Props) {
   const { completeAction } = useAIStore()
+  const { addToast } = useUIStore()
+  const { addActivity } = useActivityStore()
   const [selected, setSelected] = useState<string | null>(null)
   const [state, setState] = useState<State>('picking')
 
   function handleSchedule() {
     if (!selected) return
     setState('scheduling')
-    setTimeout(() => { setState('booked'); completeAction(actionId) }, 1400)
+    setTimeout(() => {
+      setState('booked')
+      completeAction(actionId)
+      const [day, time] = selected.split(' | ')
+      addToast({
+        type: 'calendar',
+        title: 'Added to Google Calendar',
+        subtitle: `ROI Call with ${contactName} — ${day} at ${time}`,
+      })
+      addActivity({
+        id: `act-meeting-${Date.now()}`,
+        deal_id: 'abc-corp-deal-001',
+        contact_id: 'c002',
+        type: 'meeting_booked',
+        title: `Meeting booked with ${contactName}`,
+        description: `${day} at ${time} — Google Calendar invite sent to ${contactEmail}`,
+        occurred_at: new Date().toISOString(),
+        created_by: 'rahulthakur@nexusai.com',
+      })
+    }, 1400)
   }
 
   if (state === 'booked') {
     const [day, time] = (selected ?? '').split(' | ')
     return (
-      <div className="mt-3 rounded-xl border border-emerald-500/20 bg-emerald-500/8 p-3.5 animate-fade-in">
+      <div className="mt-3 rounded-xl border border-blue-500/20 bg-blue-500/5 p-3.5 animate-fade-in">
         <div className="flex items-start gap-2.5">
-          <CheckCircle2 className="h-4 w-4 text-emerald-400 shrink-0 mt-0.5" />
+          <div className="shrink-0 mt-0.5"><CalendarIcon /></div>
           <div>
-            <p className="text-xs font-semibold text-emerald-300">Meeting booked!</p>
-            <p className="text-[11px] text-emerald-500 mt-0.5">{contactName} · {day} at {time}</p>
-            <div className="mt-2 space-y-1">
-              <div className="flex items-center gap-1.5 text-[11px] text-emerald-600">
-                <Calendar className="h-3 w-3" /> Calendar invite → {contactEmail}
-              </div>
-              <div className="flex items-center gap-1.5 text-[11px] text-emerald-600">
-                <Mail className="h-3 w-3" /> Gmail confirmation sent to you
-              </div>
-            </div>
+            <p className="text-xs font-semibold text-blue-300">Meeting scheduled!</p>
+            <p className="text-[11px] text-blue-400/80 mt-0.5">{contactName} · {day} at {time}</p>
+            <p className="text-[11px] text-blue-500/60 mt-1">Calendar invite sent to {contactEmail}</p>
           </div>
         </div>
       </div>
