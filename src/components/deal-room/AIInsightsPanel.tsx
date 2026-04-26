@@ -3,18 +3,18 @@ import { useAIStore } from '@/store'
 import { cn } from '@/lib/utils'
 import type { InsightCategory } from '@/types'
 
-const CATEGORY_CONFIG: Record<InsightCategory, { icon: typeof AlertTriangle; color: string; bg: string }> = {
-  risk: { icon: AlertTriangle, color: 'text-red-500', bg: 'bg-red-50' },
-  opportunity: { icon: Star, color: 'text-green-500', bg: 'bg-green-50' },
-  compliance: { icon: Shield, color: 'text-blue-500', bg: 'bg-blue-50' },
-  relationship: { icon: TrendingUp, color: 'text-purple-500', bg: 'bg-purple-50' },
-  timeline: { icon: Clock, color: 'text-orange-500', bg: 'bg-orange-50' },
-  competitive: { icon: TrendingUp, color: 'text-gray-500', bg: 'bg-gray-50' },
+const CATEGORY_CONFIG: Record<InsightCategory, { icon: typeof AlertTriangle; accent: string; border: string; bg: string }> = {
+  risk:         { icon: AlertTriangle, accent: 'text-rose-400',    border: 'border-l-rose-500/60',   bg: 'bg-rose-500/5' },
+  opportunity:  { icon: Star,          accent: 'text-emerald-400', border: 'border-l-emerald-500/60', bg: 'bg-emerald-500/5' },
+  compliance:   { icon: Shield,        accent: 'text-blue-400',    border: 'border-l-blue-500/60',   bg: 'bg-blue-500/5' },
+  relationship: { icon: TrendingUp,    accent: 'text-violet-400',  border: 'border-l-violet-500/60', bg: 'bg-violet-500/5' },
+  timeline:     { icon: Clock,         accent: 'text-amber-400',   border: 'border-l-amber-500/60',  bg: 'bg-amber-500/5' },
+  competitive:  { icon: TrendingUp,    accent: 'text-zinc-400',    border: 'border-l-zinc-600/60',   bg: 'bg-zinc-800/40' },
 }
 
 export function AIInsightsPanel() {
   const { insights, dismissInsight, isLoadingInsights, setLoadingInsights } = useAIStore()
-  const activeInsights = insights.filter((i) => !i.is_dismissed)
+  const active = insights.filter((i) => !i.is_dismissed)
 
   async function handleRegenerate() {
     setLoadingInsights(true)
@@ -23,10 +23,11 @@ export function AIInsightsPanel() {
   }
 
   return (
-    <div className="space-y-2">
+    <div className="space-y-2.5">
       <div className="flex items-center justify-between">
-        <h3 className="text-xs font-semibold uppercase tracking-wider text-gray-500">AI Insights</h3>
-        <button onClick={handleRegenerate} className="flex items-center gap-1 text-xs text-blue-600 hover:text-blue-700">
+        <h3 className="text-[10px] font-semibold uppercase tracking-widest text-zinc-600">AI Insights</h3>
+        <button onClick={handleRegenerate}
+          className="flex items-center gap-1 text-[11px] text-zinc-600 hover:text-zinc-300 transition-colors">
           <RefreshCw className={cn('h-3 w-3', isLoadingInsights && 'animate-spin')} />
           Refresh
         </button>
@@ -35,31 +36,32 @@ export function AIInsightsPanel() {
       {isLoadingInsights ? (
         <div className="space-y-2">
           {[1, 2, 3].map((i) => (
-            <div key={i} className="h-16 rounded-lg bg-gray-100 animate-pulse" />
+            <div key={i} className="h-14 rounded-lg bg-zinc-800/50 animate-pulse" />
           ))}
         </div>
       ) : (
         <div className="space-y-2">
-          {activeInsights.map((insight) => {
-            const config = CATEGORY_CONFIG[insight.category]
-            const Icon = config.icon
+          {active.map((insight) => {
+            const { icon: Icon, accent, border, bg } = CATEGORY_CONFIG[insight.category]
             return (
-              <div key={insight.id} className={cn('relative rounded-lg border border-gray-100 p-3', config.bg, 'animate-fade-in')}>
+              <div key={insight.id}
+                className={cn('group relative rounded-lg border border-zinc-800 border-l-2 p-3 transition-all animate-fade-in', border, bg)}>
                 <button onClick={() => dismissInsight(insight.id)}
-                  className="absolute right-2 top-2 text-gray-400 hover:text-gray-600">
+                  className="absolute right-2 top-2 text-zinc-700 hover:text-zinc-400 transition-colors opacity-0 group-hover:opacity-100">
                   <X className="h-3 w-3" />
                 </button>
                 <div className="flex items-start gap-2 pr-4">
-                  <Icon className={cn('mt-0.5 h-3.5 w-3.5 shrink-0', config.color)} />
-                  <div>
-                    <p className="text-xs font-semibold text-gray-900">{insight.title}</p>
-                    <p className="mt-0.5 text-xs leading-relaxed text-gray-600">{insight.body}</p>
+                  <Icon className={cn('mt-0.5 h-3.5 w-3.5 shrink-0', accent)} />
+                  <div className="min-w-0">
+                    <p className="text-xs font-semibold text-zinc-100">{insight.title}</p>
+                    <p className="mt-0.5 text-[11px] leading-relaxed text-zinc-500">{insight.body}</p>
                     {!insight.hide_confidence && (
                       <div className="mt-1.5 flex items-center gap-2">
-                        <div className="h-1 w-16 rounded-full bg-gray-200">
-                          <div className="h-1 rounded-full bg-blue-500" style={{ width: `${insight.confidence}%` }} />
+                        <div className="h-0.5 w-14 rounded-full bg-zinc-800">
+                          <div className={cn('h-0.5 rounded-full', accent.replace('text-', 'bg-'))}
+                            style={{ width: `${insight.confidence}%` }} />
                         </div>
-                        <span className="text-[10px] text-gray-500">{insight.confidence}% confidence</span>
+                        <span className="font-mono text-[10px] text-zinc-600">{insight.confidence}%</span>
                       </div>
                     )}
                   </div>

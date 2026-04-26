@@ -6,11 +6,18 @@ import type { AIRecommendedAction, ActionPriority } from '@/types'
 import { BookMeetingCard } from '@/components/whatsapp/BookMeetingCard'
 import { SendDocModal } from '@/components/whatsapp/SendDocModal'
 
-const PRIORITY_STYLES: Record<ActionPriority, string> = {
-  critical: 'bg-red-100 text-red-700 border-red-200',
-  high: 'bg-orange-100 text-orange-700 border-orange-200',
-  medium: 'bg-blue-100 text-blue-700 border-blue-200',
-  low: 'bg-gray-100 text-gray-600 border-gray-200',
+const PRIORITY_DOT: Record<ActionPriority, string> = {
+  critical: 'bg-rose-400',
+  high: 'bg-amber-400',
+  medium: 'bg-blue-400',
+  low: 'bg-zinc-600',
+}
+
+const PRIORITY_TEXT: Record<ActionPriority, string> = {
+  critical: 'text-rose-400',
+  high: 'text-amber-400',
+  medium: 'text-blue-400',
+  low: 'text-zinc-500',
 }
 
 const ACTION_ICONS: Record<string, typeof MessageSquare> = {
@@ -19,7 +26,7 @@ const ACTION_ICONS: Record<string, typeof MessageSquare> = {
   send_doc: FileText,
 }
 
-const ACTION_BUTTON_LABELS: Record<string, string> = {
+const ACTION_LABELS: Record<string, string> = {
   send_whatsapp: 'Send WhatsApp',
   book_meeting: 'Book Meeting',
   send_doc: 'Send Document',
@@ -43,31 +50,33 @@ export function RecommendedActions() {
   }
 
   return (
-    <div className="space-y-2">
-      <h3 className="text-xs font-semibold uppercase tracking-wider text-gray-500">AI Recommended Actions</h3>
+    <div className="space-y-2.5">
+      <h3 className="text-[10px] font-semibold uppercase tracking-widest text-zinc-600">AI Recommended Actions</h3>
+
       <div className="space-y-2">
         {pending.map((action) => {
           const Icon = ACTION_ICONS[action.action_type] ?? Zap
           const isExpanded = expandedId === action.id
-          const buttonLabel = ACTION_BUTTON_LABELS[action.action_type] ?? 'Take Action'
 
           return (
-            <div key={action.id} className="rounded-lg border border-gray-100 bg-white p-3 transition-all">
-              <div className="flex items-start gap-2">
-                <div className="mt-0.5 flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-gray-100 text-gray-500">
-                  <Icon className="h-3 w-3" />
+            <div key={action.id}
+              className="rounded-xl border border-zinc-800 bg-zinc-900/50 p-3 transition-all hover:border-zinc-700 animate-fade-in">
+              <div className="flex items-start gap-2.5">
+                <div className="mt-0.5 flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-zinc-800 border border-zinc-700">
+                  <Icon className="h-3 w-3 text-zinc-400" />
                 </div>
                 <div className="flex-1 min-w-0">
                   <div className="flex items-center gap-1.5 flex-wrap">
-                    <span className="text-xs font-semibold text-gray-900">{action.title}</span>
-                    <span className={cn('rounded-full border px-1.5 py-0.5 text-[10px] font-medium', PRIORITY_STYLES[action.priority])}>
+                    <span className="text-xs font-semibold text-zinc-100">{action.title}</span>
+                    <span className={cn('flex items-center gap-1 text-[10px] font-medium', PRIORITY_TEXT[action.priority])}>
+                      <span className={cn('h-1.5 w-1.5 rounded-full', PRIORITY_DOT[action.priority])} />
                       {action.priority}
                     </span>
                   </div>
-                  <p className="mt-0.5 text-xs text-gray-600">{action.description}</p>
+                  <p className="mt-0.5 text-[11px] leading-relaxed text-zinc-500">{action.description}</p>
                   {action.target_contact && (
-                    <p className="mt-1 text-[10px] text-gray-500">
-                      → {action.target_contact.full_name} ({action.target_contact.job_title})
+                    <p className="mt-1 text-[10px] text-zinc-700">
+                      → {action.target_contact.full_name} · {action.target_contact.job_title}
                     </p>
                   )}
                 </div>
@@ -75,12 +84,18 @@ export function RecommendedActions() {
 
               <button
                 onClick={() => handleAction(action)}
-                className="mt-2 w-full flex items-center justify-center gap-1.5 rounded-lg border border-gray-200 bg-gray-50 px-3 py-1.5 text-xs font-medium text-gray-700 hover:border-blue-300 hover:bg-blue-50 hover:text-blue-700 transition-colors">
+                className={cn(
+                  'mt-2.5 w-full flex items-center justify-center gap-1.5 rounded-lg py-1.5 text-xs font-semibold transition-all',
+                  action.action_type === 'send_whatsapp'
+                    ? 'bg-emerald-500/15 text-emerald-400 border border-emerald-500/30 hover:bg-emerald-500/25'
+                    : action.action_type === 'book_meeting'
+                    ? 'bg-blue-500/15 text-blue-400 border border-blue-500/30 hover:bg-blue-500/25'
+                    : 'bg-teal-500/15 text-teal-400 border border-teal-500/30 hover:bg-teal-500/25'
+                )}>
                 <Zap className="h-3 w-3" />
-                {buttonLabel}
+                {ACTION_LABELS[action.action_type] ?? 'Take Action'}
               </button>
 
-              {/* Inline booking card for meet action */}
               {action.action_type === 'book_meeting' && isExpanded && action.target_contact && (
                 <BookMeetingCard
                   actionId={action.id}
@@ -92,15 +107,14 @@ export function RecommendedActions() {
           )
         })}
 
-        {/* SendDocModal is rendered globally, keyed to the open action */}
         {pending.find(a => a.action_type === 'send_doc') && (
           <SendDocModal actionId={pending.find(a => a.action_type === 'send_doc')!.id} />
         )}
 
         {pending.length === 0 && (
-          <div className="flex items-center gap-2 rounded-lg border border-green-100 bg-green-50 p-3">
-            <CheckCircle2 className="h-4 w-4 text-green-500" />
-            <span className="text-xs text-green-700 font-medium">All actions completed!</span>
+          <div className="flex items-center gap-2.5 rounded-xl border border-emerald-500/20 bg-emerald-500/5 p-3">
+            <CheckCircle2 className="h-4 w-4 text-emerald-400 shrink-0" />
+            <span className="text-xs font-medium text-emerald-400">All actions completed</span>
           </div>
         )}
       </div>

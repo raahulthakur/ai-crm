@@ -7,16 +7,26 @@ interface Props {
 }
 
 export function HealthScoreBadge({ score, showLabel = true, size = 'md' }: Props) {
-  const color = score >= 80 ? 'bg-green-100 text-green-700 border-green-200'
-    : score >= 60 ? 'bg-yellow-100 text-yellow-700 border-yellow-200'
-    : 'bg-red-100 text-red-700 border-red-200'
-  const dot = score >= 80 ? 'bg-green-500' : score >= 60 ? 'bg-yellow-500' : 'bg-red-500'
+  const { ring, text, bg, label } = score >= 80
+    ? { ring: 'border-emerald-500/40', text: 'text-emerald-400', bg: 'bg-emerald-500/10', label: 'Healthy' }
+    : score >= 60
+    ? { ring: 'border-amber-500/40', text: 'text-amber-400', bg: 'bg-amber-500/10', label: 'At Risk' }
+    : { ring: 'border-rose-500/40', text: 'text-rose-400', bg: 'bg-rose-500/10', label: 'Critical' }
+
+  const dotColor = score >= 80 ? 'bg-emerald-400' : score >= 60 ? 'bg-amber-400' : 'bg-rose-400'
 
   return (
-    <span className={cn('inline-flex items-center gap-1.5 rounded-full border px-2 py-0.5 font-medium', color,
-      size === 'sm' ? 'text-xs' : size === 'lg' ? 'text-base px-3 py-1' : 'text-sm')}>
-      <span className={cn('inline-block rounded-full', dot, size === 'lg' ? 'h-2.5 w-2.5' : 'h-2 w-2')} />
-      {score}%{showLabel && <span className="text-xs opacity-70">{score >= 80 ? 'Healthy' : score >= 60 ? 'At Risk' : 'Critical'}</span>}
+    <span className={cn(
+      'inline-flex items-center gap-1.5 rounded-full border font-mono font-semibold',
+      ring, text, bg,
+      size === 'sm' ? 'px-1.5 py-0.5 text-[10px]'
+        : size === 'lg' ? 'px-3 py-1 text-sm'
+        : 'px-2 py-0.5 text-xs'
+    )}>
+      <span className={cn('inline-block rounded-full shrink-0', dotColor,
+        size === 'lg' ? 'h-2 w-2' : 'h-1.5 w-1.5')} />
+      {score}%
+      {showLabel && <span className="font-body font-normal opacity-70 ml-0.5">{label}</span>}
     </span>
   )
 }

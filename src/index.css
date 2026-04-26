@@ -4,68 +4,89 @@
 
 @layer base {
   :root {
-    --background: 0 0% 100%;
-    --foreground: 222.2 84% 4.9%;
-    --card: 0 0% 100%;
-    --card-foreground: 222.2 84% 4.9%;
-    --primary: 221.2 83.2% 53.3%;
-    --primary-foreground: 210 40% 98%;
-    --secondary: 210 40% 96.1%;
-    --secondary-foreground: 222.2 47.4% 11.2%;
-    --muted: 210 40% 96.1%;
-    --muted-foreground: 215.4 16.3% 46.9%;
-    --accent: 210 40% 96.1%;
-    --accent-foreground: 222.2 47.4% 11.2%;
-    --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 210 40% 98%;
-    --border: 214.3 31.8% 91.4%;
-    --input: 214.3 31.8% 91.4%;
-    --ring: 221.2 83.2% 53.3%;
+    --background: 180 2% 8%;            /* #131414 — user-specified */
+    --foreground: 40 15% 95%;
+    --card: 192 56% 12%;               /* #0E2D34 */
+    --card-foreground: 40 15% 95%;
+    --surface: 192 50% 16%;            /* #153C43 */
+    --primary: 74 65% 51%;             /* #B8D82C Superleap lime */
+    --primary-foreground: 192 64% 9%;
+    --secondary: 192 44% 20%;
+    --secondary-foreground: 40 10% 75%;
+    --muted: 192 44% 16%;
+    --muted-foreground: 192 25% 48%;
+    --accent: 192 44% 22%;
+    --accent-foreground: 40 15% 95%;
+    --destructive: 4 80% 58%;
+    --destructive-foreground: 40 15% 95%;
+    --border: 192 44% 20%;
+    --input: 192 44% 14%;
+    --ring: 74 65% 51%;
     --radius: 0.5rem;
   }
 
-  * {
-    @apply border-border;
-    box-sizing: border-box;
-  }
+  * { @apply border-border; box-sizing: border-box; }
+
   body {
     @apply bg-background text-foreground;
+    font-family: 'DM Sans', system-ui, -apple-system, sans-serif;
     margin: 0;
-    font-family: system-ui, -apple-system, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    font-feature-settings: 'rlig' 1, 'calt' 1;
   }
-  #root {
-    height: 100vh;
-    overflow: hidden;
+
+  #root { height: 100vh; overflow: hidden; }
+
+  ::-webkit-scrollbar { width: 4px; height: 4px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar-thumb { background: #1E4D56; border-radius: 9999px; }
+  ::-webkit-scrollbar-thumb:hover { background: #376978; }
+}
+
+@layer components {
+  .btn-amber {
+    @apply inline-flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-xs font-semibold transition-all active:scale-95;
+    background: #e3ffcc;
+    color: #131414;
+  }
+  .btn-amber:hover { background: #d0f5b0; }
+  .btn-ghost {
+    @apply inline-flex items-center gap-1.5 rounded-lg border border-zinc-700 bg-zinc-800/50 px-3 py-1.5 text-xs font-medium text-zinc-300 transition-all hover:border-zinc-600 hover:bg-zinc-800 hover:text-zinc-100 active:scale-95;
   }
 }
 
-/* React Flow node cursor */
-.react-flow__node { cursor: default; }
+/* React Flow */
+.react-flow { background: #092428 !important; }
+.react-flow__background { background: #092428 !important; }
+.react-flow__controls button {
+  background: #153C43 !important;
+  border-color: #1E4D56 !important;
+  color: #558A98 !important;
+}
+.react-flow__controls button:hover {
+  background: #1E4D56 !important;
+  color: #EDF7F9 !important;
+}
 
-/* WhatsApp bubble styles */
+/* WhatsApp dark mode (real colors) */
 .chat-bubble-out {
-  background: #dcf8c6;
-  border-radius: 18px 18px 4px 18px;
+  background: #005C4B;
+  color: #E9EDEF;
+  border-radius: 8px 8px 2px 8px;
 }
 .chat-bubble-in {
-  background: #ffffff;
-  border-radius: 18px 18px 18px 4px;
-  box-shadow: 0 1px 2px rgba(0,0,0,0.08);
+  background: #202C33;
+  color: #E9EDEF;
+  border-radius: 8px 8px 8px 2px;
 }
+.wa-bg { background: #0B141A; }
 
 /* Typing dots */
 @keyframes typing-dot {
-  0%, 80%, 100% { transform: scale(0.6); opacity: 0.4; }
+  0%, 80%, 100% { transform: scale(0.5); opacity: 0.3; }
   40% { transform: scale(1); opacity: 1; }
 }
 .typing-dot:nth-child(1) { animation: typing-dot 1.2s infinite 0s; }
 .typing-dot:nth-child(2) { animation: typing-dot 1.2s infinite 0.2s; }
 .typing-dot:nth-child(3) { animation: typing-dot 1.2s infinite 0.4s; }
-
-/* Score ring */
-@keyframes score-fill {
-  from { stroke-dashoffset: 339.3; }
-}
-.score-ring-circle {
-  animation: score-fill 1.5s ease-out forwards;
-}

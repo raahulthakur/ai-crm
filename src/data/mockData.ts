@@ -3,11 +3,11 @@ import type { Deal, Contact, DealContact, Activity, AIInsight, AIRecommendedActi
 export const DEAL_ID = 'abc-corp-deal-001'
 
 export const contacts: Contact[] = [
-  { id: 'c001', full_name: 'Vikram Anand', job_title: 'CEO', company_name: 'ABC Corp', email: 'vikram@abccorp.com' },
-  { id: 'c002', full_name: 'Rahul Mehta', job_title: 'CFO', company_name: 'ABC Corp', email: 'rahul.mehta@abccorp.com', phone: '+919876543210', last_contacted_at: new Date(Date.now() - 12 * 86400000).toISOString() },
-  { id: 'c003', full_name: 'Priya Sharma', job_title: 'VP Marketing', company_name: 'ABC Corp', email: 'priya@abccorp.com', phone: '+919123456789', last_contacted_at: new Date(Date.now() - 2 * 86400000).toISOString() },
-  { id: 'c004', full_name: 'Amit Singh', job_title: 'Team Lead', company_name: 'ABC Corp', email: 'amit@abccorp.com', last_contacted_at: new Date(Date.now() - 5 * 86400000).toISOString() },
-  { id: 'c005', full_name: 'Neha Kapoor', job_title: 'IT Security Lead', company_name: 'ABC Corp', email: 'security@abccorp.com', last_contacted_at: new Date(Date.now() - 5 * 86400000).toISOString() },
+  { id: 'c001', full_name: 'Vikram Anand',  job_title: 'CEO',             company_name: 'ABC Corp', email: 'vikram@abccorp.com',          avatar_url: 'https://i.pravatar.cc/150?img=52' },
+  { id: 'c002', full_name: 'Rahul Mehta',   job_title: 'CFO',             company_name: 'ABC Corp', email: 'rahul.mehta@abccorp.com',     avatar_url: 'https://i.pravatar.cc/150?img=12', phone: '+919876543210', last_contacted_at: new Date(Date.now() - 12 * 86400000).toISOString() },
+  { id: 'c003', full_name: 'Priya Sharma',  job_title: 'VP Marketing',    company_name: 'ABC Corp', email: 'priya@abccorp.com',           avatar_url: 'https://i.pravatar.cc/150?img=44', phone: '+919123456789', last_contacted_at: new Date(Date.now() - 2 * 86400000).toISOString() },
+  { id: 'c004', full_name: 'Amit Singh',    job_title: 'Team Lead',       company_name: 'ABC Corp', email: 'amit@abccorp.com',            avatar_url: 'https://i.pravatar.cc/150?img=15', last_contacted_at: new Date(Date.now() - 5 * 86400000).toISOString() },
+  { id: 'c005', full_name: 'Neha Kapoor',   job_title: 'IT Security Lead', company_name: 'ABC Corp', email: 'security@abccorp.com',       avatar_url: 'https://i.pravatar.cc/150?img=47', last_contacted_at: new Date(Date.now() - 5 * 86400000).toISOString() },
 ]
 
 export const deals: Deal[] = [
@@ -25,7 +25,7 @@ export const deals: Deal[] = [
     is_stuck: true,
     stuck_reason: 'CFO not responding for 12 days',
     created_at: new Date(Date.now() - 60 * 86400000).toISOString(),
-    updated_at: new Date().toISOString(),
+    updated_at: new Date(Date.now() - 12 * 86400000).toISOString(),
   },
   {
     id: 'xyz-inc-002',
@@ -39,7 +39,7 @@ export const deals: Deal[] = [
     owner_name: 'Rahul Thakur',
     is_stuck: false,
     created_at: new Date(Date.now() - 30 * 86400000).toISOString(),
-    updated_at: new Date().toISOString(),
+    updated_at: new Date(Date.now() - 2 * 86400000).toISOString(),
   },
   {
     id: 'mno-corp-003',
@@ -52,7 +52,7 @@ export const deals: Deal[] = [
     owner_name: 'Rahul Thakur',
     is_stuck: false,
     created_at: new Date(Date.now() - 15 * 86400000).toISOString(),
-    updated_at: new Date().toISOString(),
+    updated_at: new Date(Date.now() - 5 * 86400000).toISOString(),
   },
   {
     id: 'pqr-ltd-004',
@@ -66,7 +66,7 @@ export const deals: Deal[] = [
     is_stuck: true,
     stuck_reason: 'Legal review delayed',
     created_at: new Date(Date.now() - 45 * 86400000).toISOString(),
-    updated_at: new Date().toISOString(),
+    updated_at: new Date(Date.now() - 18 * 86400000).toISOString(),
   },
 ]
 

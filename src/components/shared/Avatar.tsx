@@ -1,24 +1,40 @@
 import { getInitials, cn } from '@/lib/utils'
 
-const COLORS = [
-  'bg-blue-100 text-blue-700',
-  'bg-purple-100 text-purple-700',
-  'bg-green-100 text-green-700',
-  'bg-orange-100 text-orange-700',
-  'bg-pink-100 text-pink-700',
+const PALETTES = [
+  'bg-blue-500/20 text-blue-300',
+  'bg-violet-500/20 text-violet-300',
+  'bg-emerald-500/20 text-emerald-300',
+  'bg-amber-500/20 text-amber-300',
+  'bg-rose-500/20 text-rose-300',
 ]
 
 interface Props {
   name: string
+  imageUrl?: string
   size?: 'sm' | 'md' | 'lg' | 'xl'
   className?: string
 }
 
-export function Avatar({ name, size = 'md', className }: Props) {
-  const colorIdx = name.charCodeAt(0) % COLORS.length
-  const sizeClass = size === 'sm' ? 'h-7 w-7 text-xs' : size === 'lg' ? 'h-10 w-10 text-sm' : size === 'xl' ? 'h-12 w-12 text-base' : 'h-8 w-8 text-xs'
+export function Avatar({ name, imageUrl, size = 'md', className }: Props) {
+  const idx = name.charCodeAt(0) % PALETTES.length
+  const sizeClass = size === 'sm' ? 'h-7 w-7 text-[10px]'
+    : size === 'lg' ? 'h-9 w-9 text-xs'
+    : size === 'xl' ? 'h-11 w-11 text-sm'
+    : 'h-8 w-8 text-[10px]'
+
+  if (imageUrl) {
+    return (
+      <img
+        src={imageUrl}
+        alt={name}
+        className={cn('rounded-full object-cover shrink-0 border border-white/10', sizeClass, className)}
+        onError={(e) => { (e.target as HTMLImageElement).style.display = 'none' }}
+      />
+    )
+  }
+
   return (
-    <div className={cn('flex items-center justify-center rounded-full font-semibold', COLORS[colorIdx], sizeClass, className)}>
+    <div className={cn('flex items-center justify-center rounded-full font-display font-semibold shrink-0 border border-white/10', PALETTES[idx], sizeClass, className)}>
       {getInitials(name)}
     </div>
   )

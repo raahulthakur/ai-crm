@@ -1,23 +1,49 @@
 import { useRef, useState } from 'react'
-import { FileText, Upload, X, Send, CheckCircle2, User } from 'lucide-react'
+import { FileText, Upload, X, Send, CheckCircle2, Plus, Mail } from 'lucide-react'
 import { useUIStore, useAIStore } from '@/store'
+import { Avatar } from '@/components/shared/Avatar'
 
-interface Props {
-  actionId: string
-}
+interface Recipient { name: string; email: string; role: string; removable: boolean }
 
-export function SendDocModal({ actionId }: Props) {
+const DEFAULT_RECIPIENTS: Recipient[] = [
+  { name: 'Neha Kapoor',   email: 'security@abccorp.com',    role: 'IT Security Lead', removable: false },
+  { name: 'Priya Sharma',  email: 'priya@abccorp.com',       role: 'VP Marketing',     removable: true },
+  { name: 'Rahul Mehta',   email: 'rahul.mehta@abccorp.com', role: 'CFO',              removable: true },
+]
+
+export function SendDocModal({ actionId }: { actionId: string }) {
   const { sendDocModalOpen, closeSendDocModal } = useUIStore()
   const { completeAction } = useAIStore()
+
   const fileRef = useRef<HTMLInputElement>(null)
-  const [extraFile, setExtraFile] = useState<string | null>(null)
+  const [attachments, setAttachments] = useState<string[]>(['DPDP_compliance_doc.pdf'])
+  const [recipients, setRecipients] = useState<Recipient[]>(DEFAULT_RECIPIENTS)
+  const [emailInput, setEmailInput] = useState('')
+  const [showEmailInput, setShowEmailInput] = useState(false)
   const [sent, setSent] = useState(false)
 
   if (!sendDocModalOpen) return null
 
   function handleFileChange(e: React.ChangeEvent<HTMLInputElement>) {
-    const file = e.target.files?.[0]
-    if (file) setExtraFile(file.name)
+    const f = e.target.files?.[0]
+    if (f) setAttachments((prev) => [...prev, f.name])
+  }
+
+  function removeFile(name: string) {
+    setAttachments((prev) => prev.filter((f) => f !== name))
+  }
+
+  function removeRecipient(email: string) {
+    setRecipients((prev) => prev.filter((r) => r.email !== email))
+  }
+
+  function addEmailRecipient() {
+    const trimmed = emailInput.trim()
+    if (!trimmed || !trimmed.includes('@')) return
+    const newR: Recipient = { name: trimmed.split('@')[0], email: trimmed, role: 'Custom', removable: true }
+    setRecipients((prev) => [...prev, newR])
+    setEmailInput('')
+    setShowEmailInput(false)
   }
 
   function handleSend() {
@@ -26,96 +52,111 @@ export function SendDocModal({ actionId }: Props) {
       completeAction(actionId)
       closeSendDocModal()
       setSent(false)
-      setExtraFile(null)
-    }, 1200)
+      setAttachments(['DPDP_compliance_doc.pdf'])
+      setRecipients(DEFAULT_RECIPIENTS)
+    }, 1100)
   }
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm">
-      <div className="mx-4 w-full max-w-md rounded-2xl bg-white shadow-2xl animate-bounce-in">
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/75 backdrop-blur-sm">
+      <div className="mx-4 w-full max-w-md rounded-2xl border border-zinc-700/50 bg-zinc-900 shadow-2xl animate-bounce-in">
         {/* Header */}
-        <div className="flex items-center justify-between border-b border-gray-100 px-5 py-4">
-          <div className="flex items-center gap-2">
-            <div className="flex h-7 w-7 items-center justify-center rounded-full bg-teal-100">
-              <FileText className="h-4 w-4 text-teal-600" />
+        <div className="flex items-center justify-between border-b border-zinc-800 px-5 py-4">
+          <div className="flex items-center gap-2.5">
+            <div className="flex h-7 w-7 items-center justify-center rounded-full bg-teal-500/20 border border-teal-500/30">
+              <FileText className="h-3.5 w-3.5 text-teal-400" />
             </div>
             <div>
-              <p className="text-sm font-semibold text-gray-900">Send DPDP Compliance Document</p>
-              <p className="text-xs text-gray-500">IT Security approval required</p>
+              <p className="font-display text-sm font-600 text-zinc-50">Send Compliance Document</p>
+              <p className="text-[11px] text-zinc-600">IT Security approval blocker</p>
             </div>
           </div>
-          <button onClick={closeSendDocModal} className="rounded-lg p-1 text-gray-400 hover:text-gray-600">
+          <button onClick={closeSendDocModal} className="rounded-lg p-1 text-zinc-600 hover:text-zinc-300 transition-colors">
             <X className="h-4 w-4" />
           </button>
         </div>
 
-        <div className="px-5 py-4 space-y-4">
-          {/* Attached document */}
+        <div className="px-5 py-4 space-y-4 max-h-[60vh] overflow-y-auto">
+          {/* Attachments */}
           <div>
-            <p className="mb-2 text-xs font-medium text-gray-600">Attached Document</p>
-            <div className="flex items-center gap-3 rounded-xl border border-gray-200 bg-gray-50 px-3 py-2.5">
-              <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-teal-100">
-                <FileText className="h-4 w-4 text-teal-600" />
-              </div>
-              <div className="min-w-0 flex-1">
-                <p className="truncate text-xs font-semibold text-gray-900">DPDP_compliance_doc.pdf</p>
-                <p className="text-[10px] text-gray-500">Compliance certification · 2026</p>
-              </div>
-              <span className="shrink-0 rounded-full bg-teal-100 px-2 py-0.5 text-[10px] font-medium text-teal-700">Ready</span>
+            <p className="mb-2 text-[10px] font-semibold uppercase tracking-widest text-zinc-600">Attached Files</p>
+            <div className="space-y-1.5">
+              {attachments.map((name) => (
+                <div key={name} className="flex items-center gap-2.5 rounded-xl border border-zinc-700/50 bg-zinc-800/50 px-3 py-2.5">
+                  <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-teal-500/15 border border-teal-500/20 shrink-0">
+                    <FileText className="h-3.5 w-3.5 text-teal-400" />
+                  </div>
+                  <div className="min-w-0 flex-1">
+                    <p className="font-mono text-xs font-semibold text-zinc-200 truncate">{name}</p>
+                  </div>
+                  <button onClick={() => removeFile(name)}
+                    className="shrink-0 rounded p-0.5 text-zinc-600 hover:text-rose-400 transition-colors">
+                    <X className="h-3.5 w-3.5" />
+                  </button>
+                </div>
+              ))}
             </div>
-
-            {/* Extra uploaded file */}
-            {extraFile && (
-              <div className="mt-2 flex items-center gap-2 rounded-lg border border-gray-200 bg-gray-50 px-3 py-2">
-                <FileText className="h-3.5 w-3.5 text-gray-500 shrink-0" />
-                <span className="text-xs text-gray-700 truncate flex-1">{extraFile}</span>
-                <button onClick={() => setExtraFile(null)} className="text-gray-400 hover:text-gray-600">
-                  <X className="h-3 w-3" />
-                </button>
-              </div>
-            )}
-
-            {/* Upload from device */}
             <input ref={fileRef} type="file" className="hidden" onChange={handleFileChange} />
             <button onClick={() => fileRef.current?.click()}
-              className="mt-2 flex items-center gap-1.5 text-xs text-blue-600 hover:text-blue-700">
+              className="mt-2 flex items-center gap-1.5 text-[11px] text-blue-400 hover:text-blue-300 transition-colors">
               <Upload className="h-3.5 w-3.5" /> Upload additional file from device
             </button>
           </div>
 
           {/* Recipients */}
           <div>
-            <p className="mb-2 text-xs font-medium text-gray-600">Recipients</p>
+            <p className="mb-2 text-[10px] font-semibold uppercase tracking-widest text-zinc-600">Recipients</p>
             <div className="space-y-1.5">
-              {[
-                { name: 'Neha Kapoor', role: 'IT Security Lead', email: 'security@abccorp.com' },
-              ].map((r) => (
-                <div key={r.email} className="flex items-center gap-2 rounded-lg border border-gray-100 bg-gray-50 px-3 py-2">
-                  <div className="flex h-7 w-7 items-center justify-center rounded-full bg-red-100 text-xs font-semibold text-red-700 shrink-0">NK</div>
+              {recipients.map((r) => (
+                <div key={r.email} className="flex items-center gap-2.5 rounded-xl border border-zinc-700/50 bg-zinc-800/40 px-3 py-2">
+                  <Avatar name={r.name} size="sm" />
                   <div className="min-w-0 flex-1">
-                    <p className="text-xs font-medium text-gray-900">{r.name}</p>
-                    <p className="text-[10px] text-gray-500">{r.role} · {r.email}</p>
+                    <p className="text-xs font-semibold text-zinc-200">{r.name}</p>
+                    <p className="text-[10px] text-zinc-600">{r.role} · {r.email}</p>
                   </div>
-                  <User className="h-3 w-3 text-gray-400 shrink-0" />
+                  {r.removable && (
+                    <button onClick={() => removeRecipient(r.email)}
+                      className="shrink-0 rounded p-0.5 text-zinc-700 hover:text-rose-400 transition-colors">
+                      <X className="h-3.5 w-3.5" />
+                    </button>
+                  )}
                 </div>
               ))}
             </div>
+
+            {/* Add by email */}
+            {showEmailInput ? (
+              <div className="mt-2 flex gap-2">
+                <div className="flex flex-1 items-center gap-1.5 rounded-lg border border-zinc-700 bg-zinc-800 px-3 py-2 focus-within:border-amber-400/40 transition-colors">
+                  <Mail className="h-3 w-3 text-zinc-600 shrink-0" />
+                  <input
+                    type="email" placeholder="name@company.com" value={emailInput}
+                    onChange={(e) => setEmailInput(e.target.value)}
+                    onKeyDown={(e) => e.key === 'Enter' && addEmailRecipient()}
+                    autoFocus
+                    className="w-full bg-transparent text-xs text-zinc-200 placeholder-zinc-600 outline-none"
+                  />
+                </div>
+                <button onClick={addEmailRecipient} className="btn-ghost text-[11px]">Add</button>
+                <button onClick={() => { setShowEmailInput(false); setEmailInput('') }}
+                  className="rounded-lg p-1.5 text-zinc-600 hover:text-zinc-400 transition-colors"><X className="h-3.5 w-3.5" /></button>
+              </div>
+            ) : (
+              <button onClick={() => setShowEmailInput(true)}
+                className="mt-2 flex items-center gap-1.5 text-[11px] text-blue-400 hover:text-blue-300 transition-colors">
+                <Plus className="h-3.5 w-3.5" /> Add recipient by email
+              </button>
+            )}
           </div>
         </div>
 
         {/* Footer */}
-        <div className="flex gap-2 border-t border-gray-100 px-5 py-4">
+        <div className="flex gap-2 border-t border-zinc-800 px-5 py-4">
           <button onClick={closeSendDocModal}
-            className="flex-1 rounded-lg border border-gray-200 py-2 text-sm font-medium text-gray-600 hover:bg-gray-50">
-            Cancel
-          </button>
-          <button onClick={handleSend} disabled={sent}
-            className="flex flex-1 items-center justify-center gap-2 rounded-lg bg-teal-600 py-2 text-sm font-semibold text-white hover:bg-teal-700 disabled:opacity-60 transition-colors">
-            {sent ? (
-              <><CheckCircle2 className="h-4 w-4" /> Sending…</>
-            ) : (
-              <><Send className="h-3.5 w-3.5" /> Send Now</>
-            )}
+            className="flex-1 rounded-lg border border-zinc-700 py-2.5 text-sm font-medium text-zinc-500 hover:border-zinc-600 hover:text-zinc-300 transition-colors">Cancel</button>
+          <button onClick={handleSend} disabled={sent || attachments.length === 0 || recipients.length === 0}
+            className="flex flex-1 items-center justify-center gap-2 rounded-lg bg-teal-600 py-2.5 text-sm font-semibold text-white hover:bg-teal-500 disabled:opacity-50 transition-colors">
+            {sent ? <><CheckCircle2 className="h-4 w-4" /> Sending…</> : <><Send className="h-3.5 w-3.5" /> Send Now</>}
           </button>
         </div>
       </div>
