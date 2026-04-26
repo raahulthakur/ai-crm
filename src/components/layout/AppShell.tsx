@@ -1,6 +1,7 @@
 import { Link, Outlet, useLocation } from 'react-router-dom'
 import { BarChart3, Zap, Bell, Settings, Users, Building2, Activity, BarChart2, Inbox, GitMerge, ChevronRight } from 'lucide-react'
 import { cn } from '@/lib/utils'
+import { ChatBot } from '@/components/chatbot/ChatBot'
 
 const NAV_SECTIONS = [
   {
@@ -102,6 +103,9 @@ export function AppShell() {
           <Outlet />
         </main>
       </div>
+
+      {/* AI Chatbot — floats over all pages */}
+      <ChatBot />
     </div>
   )
 }
