@@ -14,7 +14,7 @@ const ROLE_LABELS: Record<string, string> = {
 const STATUS_COLORS: Record<string, { pill: string; dot: string }> = {
   champion:      { pill: 'bg-emerald-500/15 text-emerald-400 border-emerald-500/30', dot: 'bg-emerald-400' },
   blocked:       { pill: 'bg-rose-500/15 text-rose-400 border-rose-500/30',          dot: 'bg-rose-400' },
-  not_contacted: { pill: 'bg-zinc-700/50 text-zinc-500 border-zinc-600/40',           dot: 'bg-zinc-600' },
+  not_contacted: { pill: 'bg-zinc-700/50 text-[#64748B] border-zinc-600/40',           dot: 'bg-zinc-600' },
   neutral:       { pill: 'bg-blue-500/15 text-blue-400 border-blue-500/30',           dot: 'bg-blue-400' },
   engaged:       { pill: 'bg-blue-500/15 text-blue-400 border-blue-500/30',           dot: 'bg-blue-400' },
   unresponsive:  { pill: 'bg-amber-500/15 text-amber-400 border-amber-500/30',        dot: 'bg-amber-400' },
@@ -46,7 +46,7 @@ export function ContactModal({ dc, onClose }: Props) {
         {/* Header */}
         <div className="relative flex flex-col items-center pt-8 pb-5 px-6 border-b border-zinc-800">
           <button onClick={onClose}
-            className="absolute right-4 top-4 rounded-lg p-1 text-zinc-600 hover:text-zinc-300 transition-colors">
+            className="absolute right-4 top-4 rounded-lg p-1 text-[#475569] hover:text-[#0F172A] transition-colors">
             <X className="h-4 w-4" />
           </button>
 
@@ -62,7 +62,7 @@ export function ContactModal({ dc, onClose }: Props) {
 
           <h2 className="font-display text-base font-700 text-zinc-50">{contact.full_name}</h2>
           <p className="text-sm text-zinc-400 mt-0.5">{contact.job_title}</p>
-          <p className="text-xs text-zinc-600 mt-0.5">{contact.company_name}</p>
+          <p className="text-xs text-[#475569] mt-0.5">{contact.company_name}</p>
 
           {/* Badges */}
           <div className="flex items-center gap-2 mt-3 flex-wrap justify-center">
@@ -91,7 +91,7 @@ export function ContactModal({ dc, onClose }: Props) {
                 <Mail className="h-3.5 w-3.5 text-zinc-400" />
               </div>
               <div className="min-w-0 flex-1">
-                <p className="text-[10px] text-zinc-600 uppercase tracking-wider">Email</p>
+                <p className="text-[10px] text-[#475569] uppercase tracking-wider">Email</p>
                 <a href={`mailto:${contact.email}`}
                   className="text-xs text-zinc-200 hover:text-amber-400 transition-colors flex items-center gap-1">
                   {contact.email} <ExternalLink className="h-2.5 w-2.5 opacity-50" />
@@ -106,7 +106,7 @@ export function ContactModal({ dc, onClose }: Props) {
                 <Phone className="h-3.5 w-3.5 text-zinc-400" />
               </div>
               <div className="min-w-0 flex-1">
-                <p className="text-[10px] text-zinc-600 uppercase tracking-wider">Phone / WhatsApp</p>
+                <p className="text-[10px] text-[#475569] uppercase tracking-wider">Phone / WhatsApp</p>
                 <p className="text-xs text-zinc-200 font-mono">{contact.phone}</p>
               </div>
             </div>
@@ -118,7 +118,7 @@ export function ContactModal({ dc, onClose }: Props) {
                 <Clock className="h-3.5 w-3.5 text-zinc-400" />
               </div>
               <div className="min-w-0 flex-1">
-                <p className="text-[10px] text-zinc-600 uppercase tracking-wider">Last Contacted</p>
+                <p className="text-[10px] text-[#475569] uppercase tracking-wider">Last Contacted</p>
                 <p className={`text-xs font-medium ${daysSince != null && daysSince > 7 ? 'text-rose-400' : 'text-zinc-200'}`}>
                   {timeAgo(contact.last_contacted_at)}
                   {daysSince != null && daysSince > 7 && ` — ${daysSince} days silent`}
@@ -130,11 +130,11 @@ export function ContactModal({ dc, onClose }: Props) {
           {/* Role + influence */}
           <div className="mt-1 grid grid-cols-2 gap-2 rounded-xl border border-zinc-800 bg-zinc-800/30 p-3">
             <div>
-              <p className="text-[10px] text-zinc-600 uppercase tracking-wider mb-1">Deal Role</p>
+              <p className="text-[10px] text-[#475569] uppercase tracking-wider mb-1">Deal Role</p>
               <p className="text-xs font-semibold text-zinc-200">{ROLE_LABELS[role] ?? role}</p>
             </div>
             <div>
-              <p className="text-[10px] text-zinc-600 uppercase tracking-wider mb-1">Influence</p>
+              <p className="text-[10px] text-[#475569] uppercase tracking-wider mb-1">Influence</p>
               <div className="flex items-center gap-2">
                 <div className="flex-1 h-1.5 rounded-full bg-zinc-700">
                   <div className="h-1.5 rounded-full bg-amber-400" style={{ width: `${influence_weight}%` }} />
@@ -144,7 +144,7 @@ export function ContactModal({ dc, onClose }: Props) {
             </div>
           </div>
 
-          {notes && <p className="text-[11px] italic text-zinc-600 border-l-2 border-zinc-700 pl-3">{notes}</p>}
+          {notes && <p className="text-[11px] italic text-[#475569] border-l-2 border-zinc-700 pl-3">{notes}</p>}
         </div>
 
         {/* Actions */}

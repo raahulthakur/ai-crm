@@ -102,7 +102,7 @@ export function SplitViewPage() {
       <div className='flex w-1/2 flex-col border-r border-zinc-800'>
         <div
           className='flex items-center gap-3 px-4 py-3 border-b'
-          style={{ background: '#202C33', borderColor: '#2A3942' }}
+          style={{ background: '#059669', borderColor: '#047857' }}
         >
           <Avatar
             name={PRIYA.full_name}
@@ -110,10 +110,10 @@ export function SplitViewPage() {
             size='lg'
           />
           <div>
-            <p className='text-sm font-semibold text-[#E9EDEF]'>
+            <p className='text-sm font-semibold text-white'>
               {PRIYA.full_name}
             </p>
-            <p className='text-[11px] text-[#8696A0]'>
+            <p className='text-[11px] text-green-100'>
               {PRIYA.job_title} · Razorpay
             </p>
           </div>
@@ -157,9 +157,9 @@ export function SplitViewPage() {
               <Avatar name={PRIYA.full_name} size='sm' className='shrink-0' />
               <div className='chat-bubble-in px-4 py-3'>
                 <div className='flex gap-1'>
-                  <span className='typing-dot h-2 w-2 rounded-full bg-[#8696A0]' />
-                  <span className='typing-dot h-2 w-2 rounded-full bg-[#8696A0]' />
-                  <span className='typing-dot h-2 w-2 rounded-full bg-[#8696A0]' />
+                  <span className='typing-dot h-2 w-2 rounded-full bg-gray-400' />
+                  <span className='typing-dot h-2 w-2 rounded-full bg-gray-400' />
+                  <span className='typing-dot h-2 w-2 rounded-full bg-gray-400' />
                 </div>
               </div>
             </div>
@@ -171,7 +171,7 @@ export function SplitViewPage() {
       {/* RIGHT — Live deal update */}
       <div className='flex w-1/2 flex-col overflow-y-auto bg-zinc-950'>
         <div className='border-b border-zinc-800 bg-zinc-900/30 px-4 py-2'>
-          <p className='text-[10px] font-semibold uppercase tracking-widest text-zinc-600'>
+          <p className='text-[10px] font-semibold uppercase tracking-widest text-[#475569]'>
             Razorpay · Live Update
           </p>
         </div>
@@ -200,7 +200,7 @@ export function SplitViewPage() {
                       +22 pts
                     </span>
                   </div>
-                  <p className='text-[11px] text-zinc-600'>last 5 minutes</p>
+                  <p className='text-[11px] text-[#475569]'>last 5 minutes</p>
                   <div className='space-y-1.5'>
                     {[
                       { dot: 'bg-emerald-400', label: 'CFO approved budget' },
@@ -221,7 +221,7 @@ export function SplitViewPage() {
               )}
             </div>
             {!breakthrough && (
-              <p className='mt-3 text-center text-[11px] text-zinc-600'>
+              <p className='mt-3 text-center text-[11px] text-[#475569]'>
                 Analyzing response…
               </p>
             )}
@@ -234,7 +234,7 @@ export function SplitViewPage() {
                 <RecommendedActions />
               </div>
               <button
-                onClick={() => navigate(`/deals/${DEAL_ID}/victory`)}
+                onClick={() => navigate(`/deals/${DEAL_ID}`)}
                 className='w-full flex items-center justify-center gap-2 rounded-xl btn-amber py-3 text-sm'
               >
                 View Updated Deal Room <ArrowRight className='h-4 w-4' />

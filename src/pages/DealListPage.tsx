@@ -56,10 +56,12 @@ export function DealListPage() {
       <div className="flex items-end justify-between">
         <div>
           <h2 className="font-display text-xl font-700 tracking-tight text-zinc-50">All Deals</h2>
-          <div className="mt-1 flex items-center gap-3 text-sm">
-            <span className="font-mono text-amber-400 font-semibold">{formatCurrency(filtered.reduce((s, d) => s + d.arr_value, 0))}</span>
-            <span className="text-zinc-700">·</span>
-            <span className="text-zinc-500">{filtered.length} deal{filtered.length !== 1 ? 's' : ''}</span>
+          <div className="mt-1 flex items-center gap-2 text-sm flex-wrap">
+            <span className="text-[#64748B] text-xs font-medium">Total value</span>
+            <span className="font-mono text-amber-400 font-bold">{formatCurrency(filtered.reduce((s, d) => s + d.arr_value, 0))}</span>
+            <span className="text-zinc-700 mx-1">·</span>
+            <span className="text-[#64748B] text-xs font-medium">Total deals</span>
+            <span className="font-mono text-zinc-300 font-bold">{filtered.length} deal{filtered.length !== 1 ? 's' : ''}</span>
           </div>
         </div>
         <button onClick={() => setModalOpen(true)} className="btn-amber">
@@ -70,12 +72,12 @@ export function DealListPage() {
       {/* Filters */}
       <div className="flex flex-wrap items-center gap-2">
         <div className="flex items-center gap-1.5 rounded-lg border border-zinc-700/60 bg-zinc-900 px-3 py-1.5">
-          <span className="text-[10px] font-semibold uppercase tracking-wider text-zinc-600">ARR &gt;</span>
-          <span className="text-xs text-zinc-600">$</span>
+          <span className="text-[10px] font-semibold uppercase tracking-wider text-[#475569]">ARR &gt;</span>
+          <span className="text-xs text-[#475569]">$</span>
           <input type="number" min={0} placeholder="0" value={filters.arrGt}
             onChange={(e) => setFilters((f) => ({ ...f, arrGt: e.target.value }))}
             className="w-12 bg-transparent text-xs text-zinc-200 outline-none placeholder-zinc-700 font-mono" />
-          <span className="text-xs text-zinc-600">K</span>
+          <span className="text-xs text-[#475569]">K</span>
         </div>
         <select value={filters.stage} onChange={(e) => setFilters((f) => ({ ...f, stage: e.target.value }))}
           className="rounded-lg border border-zinc-700/60 bg-zinc-900 px-2.5 py-1.5 text-xs text-zinc-300 outline-none cursor-pointer appearance-none">
@@ -90,21 +92,21 @@ export function DealListPage() {
         </select>
         {hasFilters && (
           <button onClick={() => setFilters({ arrGt: '', stage: 'all', health: 'all' })}
-            className="flex items-center gap-1 rounded-lg border border-zinc-700/60 bg-zinc-900 px-2.5 py-1.5 text-xs text-zinc-500 hover:text-zinc-300 transition-colors">
+            className="flex items-center gap-1 rounded-lg border border-zinc-700/60 bg-zinc-900 px-2.5 py-1.5 text-xs text-[#64748B] hover:text-[#0F172A] transition-colors">
             <X className="h-3 w-3" /> Clear
           </button>
         )}
         {hasFilters && filtered.length === 0 && (
-          <span className="flex items-center gap-1 text-xs text-zinc-600"><Search className="h-3 w-3" /> No matches</span>
+          <span className="flex items-center gap-1 text-xs text-[#475569]"><Search className="h-3 w-3" /> No matches</span>
         )}
       </div>
 
       {/* Stuck deals — red warning */}
       {stuck.length > 0 && (
-        <div className="rounded-xl border border-rose-500/20 bg-rose-500/5 p-4">
+        <div className="rounded-xl border border-[#EF4444]/30 bg-[#FEE2E2] p-4">
           <div className="flex items-center gap-2 mb-3">
-            <TrendingDown className="h-4 w-4 text-rose-400" />
-            <span className="font-display text-sm font-600 text-rose-300">{stuck.length} deal{stuck.length > 1 ? 's' : ''} need attention</span>
+            <TrendingDown className="h-4 w-4 text-[#DC2626]" />
+            <span className="font-display text-sm font-600 text-[#DC2626]">{stuck.length} deal{stuck.length > 1 ? 's' : ''} need attention</span>
           </div>
           <div className="space-y-2">
             {stuck.map((d) => <StuckDealRow key={d.id} deal={d} onOpen={handleOpen} />)}
@@ -118,7 +120,7 @@ export function DealListPage() {
           <thead>
             <tr className="border-b border-zinc-800 bg-zinc-900/50">
               {['Company', 'ARR', 'Stage', 'Health', 'Activity', ''].map((h) => (
-                <th key={h} className="px-4 py-2.5 text-left text-[10px] font-semibold uppercase tracking-widest text-zinc-600">{h}</th>
+                <th key={h} className="px-4 py-2.5 text-left text-[10px] font-semibold uppercase tracking-widest text-[#475569]">{h}</th>
               ))}
             </tr>
           </thead>
@@ -127,10 +129,10 @@ export function DealListPage() {
               <tr key={deal.id} className="cursor-pointer transition-colors hover:bg-zinc-900/70 group" onClick={() => handleOpen(deal)}>
                 <td className="px-4 py-3.5">
                   <div className="flex items-center gap-2">
-                    {deal.is_stuck && <AlertTriangle className="h-3.5 w-3.5 shrink-0 text-rose-400" />}
+                    {deal.is_stuck && <AlertTriangle className="h-3.5 w-3.5 shrink-0 text-[#EF4444]" />}
                     <div>
                       <p className="text-sm font-semibold text-zinc-100">{deal.company_name}</p>
-                      {deal.stuck_reason && <p className="text-xs text-rose-400/70 truncate max-w-[180px]">{deal.stuck_reason}</p>}
+                      {deal.stuck_reason && <p className="text-xs text-[#EF4444] truncate max-w-[180px]">{deal.stuck_reason}</p>}
                     </div>
                   </div>
                 </td>
@@ -140,7 +142,7 @@ export function DealListPage() {
                 </td>
                 <td className="px-4 py-3.5"><HealthScoreBadge score={deal.health_score} /></td>
                 <td className="px-4 py-3.5">
-                  <div className="flex items-center gap-1 text-[11px] text-zinc-600"><Clock className="h-3 w-3" />{timeAgo(deal.updated_at)}</div>
+                  <div className="flex items-center gap-1 text-[11px] text-[#475569]"><Clock className="h-3 w-3" />{timeAgo(deal.updated_at)}</div>
                 </td>
                 <td className="px-4 py-3.5">
                   <button onClick={(e) => { e.stopPropagation(); handleOpen(deal) }}
@@ -162,26 +164,26 @@ export function DealListPage() {
             <div className="flex items-center justify-between border-b border-zinc-800 px-5 py-4">
               <div>
                 <p className="font-display text-sm font-600 text-zinc-50">New Deal</p>
-                <p className="text-[11px] text-zinc-500 mt-0.5">Add a company to your pipeline</p>
+                <p className="text-[11px] text-[#64748B] mt-0.5">Add a company to your pipeline</p>
               </div>
-              <button onClick={() => setModalOpen(false)} className="rounded-lg p-1 text-zinc-600 hover:text-zinc-300 transition-colors"><X className="h-4 w-4" /></button>
+              <button onClick={() => setModalOpen(false)} className="rounded-lg p-1 text-[#475569] hover:text-[#0F172A] transition-colors"><X className="h-4 w-4" /></button>
             </div>
             <form onSubmit={handleCreateDeal} className="px-5 py-4 space-y-4">
               <div>
                 <label className="mb-1.5 block text-xs font-semibold text-zinc-400 uppercase tracking-wider">Company Name *</label>
                 <input type="text" required placeholder="e.g. Acme Corp" value={form.company}
                   onChange={(e) => setForm((f) => ({ ...f, company: e.target.value }))}
-                  className="w-full rounded-lg border border-zinc-700 bg-zinc-800 px-3 py-2.5 text-sm text-zinc-100 placeholder-zinc-600 outline-none focus:border-amber-400/60 focus:ring-1 focus:ring-amber-400/30 transition-colors" />
+                  className="w-full rounded-lg border border-zinc-700 bg-zinc-800 px-3 py-2.5 text-sm text-zinc-100 placeholder-[#94A3B8] outline-none focus:border-amber-400/60 focus:ring-1 focus:ring-amber-400/30 transition-colors" />
               </div>
               <div className="grid grid-cols-2 gap-3">
                 <div>
                   <label className="mb-1.5 block text-xs font-semibold text-zinc-400 uppercase tracking-wider">ARR ($K)</label>
                   <div className="flex items-center gap-1 rounded-lg border border-zinc-700 bg-zinc-800 px-3 py-2.5 focus-within:border-amber-400/60 transition-colors">
-                    <span className="text-xs font-mono text-zinc-600">$</span>
+                    <span className="text-xs font-mono text-[#475569]">$</span>
                     <input type="number" min={1} placeholder="50" value={form.arr}
                       onChange={(e) => setForm((f) => ({ ...f, arr: e.target.value }))}
                       className="w-full bg-transparent text-sm text-zinc-100 font-mono outline-none placeholder-zinc-700" />
-                    <span className="text-xs font-mono text-zinc-600">K</span>
+                    <span className="text-xs font-mono text-[#475569]">K</span>
                   </div>
                 </div>
                 <div>
@@ -194,7 +196,7 @@ export function DealListPage() {
               </div>
               <div className="flex gap-2 pt-1">
                 <button type="button" onClick={() => setModalOpen(false)}
-                  className="flex-1 rounded-lg border border-zinc-700 py-2.5 text-sm font-medium text-zinc-500 hover:border-zinc-600 hover:text-zinc-300 transition-colors">Cancel</button>
+                  className="flex-1 rounded-lg border border-zinc-700 py-2.5 text-sm font-medium text-[#64748B] hover:border-zinc-600 hover:text-[#0F172A] transition-colors">Cancel</button>
                 <button type="submit" className="flex-1 btn-amber justify-center py-2.5 text-sm">Add Deal</button>
               </div>
             </form>
@@ -212,7 +214,7 @@ function StuckDealRow({ deal, onOpen }: { deal: Deal; onOpen: (d: Deal) => void 
         <span className="font-semibold text-sm text-zinc-100 truncate">{deal.company_name}</span>
         <span className="font-mono text-xs font-semibold text-amber-400 shrink-0">{formatCurrency(deal.arr_value)}</span>
         <HealthScoreBadge score={deal.health_score} size="sm" showLabel={false} />
-        <span className="text-xs text-rose-400/70 truncate hidden sm:block">{deal.stuck_reason}</span>
+        <span className="text-xs text-[#EF4444] truncate hidden sm:block">{deal.stuck_reason}</span>
       </div>
       <button onClick={() => onOpen(deal)} className="btn-amber shrink-0 ml-3">
         View Room <ChevronRight className="h-3 w-3" />

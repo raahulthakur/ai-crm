@@ -6,7 +6,7 @@ const STATUS_STYLES: Record<ContactStatus, string> = {
   engaged: 'bg-blue-500/15 text-blue-400 border-blue-500/30',
   neutral: 'bg-zinc-700/50 text-zinc-400 border-zinc-600/50',
   blocked: 'bg-rose-500/15 text-rose-400 border-rose-500/30',
-  not_contacted: 'bg-zinc-800/80 text-zinc-500 border-zinc-700/50',
+  not_contacted: 'bg-zinc-800/80 text-[#64748B] border-zinc-700/50',
   unresponsive: 'bg-amber-500/15 text-amber-400 border-amber-500/30',
 }
 

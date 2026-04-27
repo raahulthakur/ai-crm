@@ -3,7 +3,6 @@ import { AppShell } from '@/components/layout/AppShell'
 import { DealListPage } from '@/pages/DealListPage'
 import { DealRoomPage } from '@/pages/DealRoomPage'
 import { SplitViewPage } from '@/pages/SplitViewPage'
-import { VictoryPage } from '@/pages/VictoryPage'
 import { WIPPage } from '@/pages/WIPPage'
 
 export default function App() {
@@ -17,7 +16,8 @@ export default function App() {
         <Route path="deals" element={<DealListPage />} />
         <Route path="deals/:id" element={<DealRoomPage />} />
         <Route path="deals/:id/conversation" element={<SplitViewPage />} />
-        <Route path="deals/:id/victory" element={<VictoryPage />} />
+        {/* Victory redirects back to deal room (removed confetti screen) */}
+        <Route path="deals/:id/victory" element={<Navigate to="/deals" replace />} />
 
         {/* Placeholder nav routes */}
         <Route path="pipeline"   element={<WIPPage />} />

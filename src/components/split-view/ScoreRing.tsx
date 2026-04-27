@@ -43,7 +43,7 @@ export function ScoreRing({ from, to, size = 120 }: Props) {
       </svg>
       <div className="absolute inset-0 flex flex-col items-center justify-center">
         <span className="font-mono text-2xl font-bold" style={{ color: stroke }}>{current}%</span>
-        <span className="text-[10px] text-zinc-600 uppercase tracking-wider">Health</span>
+        <span className="text-[10px] text-[#475569] uppercase tracking-wider">Health</span>
       </div>
     </div>
   )

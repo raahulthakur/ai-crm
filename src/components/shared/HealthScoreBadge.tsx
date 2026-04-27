@@ -7,26 +7,25 @@ interface Props {
 }
 
 export function HealthScoreBadge({ score, showLabel = true, size = 'md' }: Props) {
-  const { ring, text, bg, label } = score >= 80
-    ? { ring: 'border-emerald-500/40', text: 'text-emerald-400', bg: 'bg-emerald-500/10', label: 'Healthy' }
+  // Dark text on light background — WCAG AA compliant
+  const config = score >= 80
+    ? { bg: 'bg-[#ECFDF5]', text: 'text-[#065F46]', border: 'border-[#A7F3D0]', dot: 'bg-[#10B981]', label: 'Healthy' }
     : score >= 60
-    ? { ring: 'border-amber-500/40', text: 'text-amber-400', bg: 'bg-amber-500/10', label: 'At Risk' }
-    : { ring: 'border-rose-500/40', text: 'text-rose-400', bg: 'bg-rose-500/10', label: 'Critical' }
-
-  const dotColor = score >= 80 ? 'bg-emerald-400' : score >= 60 ? 'bg-amber-400' : 'bg-rose-400'
+    ? { bg: 'bg-[#FEF3C7]', text: 'text-[#92400E]', border: 'border-[#FDE68A]', dot: 'bg-[#F59E0B]', label: 'At Risk' }
+    : { bg: 'bg-[#FEE2E2]', text: 'text-[#991B1B]', border: 'border-[#FECACA]', dot: 'bg-[#EF4444]',  label: 'Critical' }
 
   return (
     <span className={cn(
       'inline-flex items-center gap-1.5 rounded-full border font-mono font-semibold',
-      ring, text, bg,
+      config.bg, config.text, config.border,
       size === 'sm' ? 'px-1.5 py-0.5 text-[10px]'
         : size === 'lg' ? 'px-3 py-1 text-sm'
         : 'px-2 py-0.5 text-xs'
     )}>
-      <span className={cn('inline-block rounded-full shrink-0', dotColor,
+      <span className={cn('inline-block rounded-full shrink-0', config.dot,
         size === 'lg' ? 'h-2 w-2' : 'h-1.5 w-1.5')} />
       {score}%
-      {showLabel && <span className="font-body font-normal opacity-70 ml-0.5">{label}</span>}
+      {showLabel && <span className="font-body font-semibold opacity-90 ml-0.5 text-[10px]">{config.label}</span>}
     </span>
   )
 }

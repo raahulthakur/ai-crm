@@ -114,18 +114,18 @@ export function WhatsAppModal() {
         <div className='flex items-center justify-between border-b border-zinc-800 px-5 py-4'>
           <div className='flex items-center gap-2.5'>
             <div className='flex h-7 w-7 items-center justify-center rounded-full bg-emerald-500/20 border border-emerald-500/30'>
-              <MessageSquare className='h-3.5 w-3.5 text-emerald-400' />
+              <MessageSquare className='h-3.5 w-3.5 text-[#059669]' />
             </div>
             <div>
               <p className='font-display text-sm font-600 text-zinc-50'>
                 WhatsApp Follow-Up
               </p>
-              <p className='text-[11px] text-zinc-600'>AI Recommended Action</p>
+              <p className='text-[11px] text-[#475569]'>AI Recommended Action</p>
             </div>
           </div>
           <button
             onClick={closeWhatsAppModal}
-            className='rounded-lg p-1 text-zinc-600 hover:text-zinc-300 transition-colors'
+            className='rounded-lg p-1 text-[#475569] hover:text-[#0F172A] transition-colors'
           >
             <X className='h-4 w-4' />
           </button>
@@ -133,7 +133,7 @@ export function WhatsAppModal() {
 
         {/* To */}
         <div className='border-b border-zinc-800 px-5 py-3'>
-          <p className='mb-2 text-[10px] font-semibold uppercase tracking-widest text-zinc-600'>
+          <p className='mb-2 text-[10px] font-semibold uppercase tracking-widest text-[#475569]'>
             To
           </p>
           <div className='flex items-center gap-3'>
@@ -146,10 +146,10 @@ export function WhatsAppModal() {
               <p className='text-sm font-semibold text-zinc-100'>
                 {whatsAppTarget.full_name}
               </p>
-              <p className='text-[11px] text-zinc-500'>
+              <p className='text-[11px] text-[#64748B]'>
                 {whatsAppTarget.job_title} · Razorpay
               </p>
-              <p className='text-[11px] font-medium text-emerald-400'>
+              <p className='text-[11px] font-medium text-[#059669]'>
                 Champion — can nudge CFO internally
               </p>
             </div>
@@ -167,17 +167,17 @@ export function WhatsAppModal() {
               <button
                 onClick={handleRegenerate}
                 disabled={isRegenerating || isGeneratingMessage}
-                className='flex items-center gap-1 text-[11px] text-blue-400 hover:text-blue-300 transition-colors disabled:opacity-40'
+                className='flex items-center gap-1 text-[11px] text-[#059669] hover:text-[#047857] transition-colors disabled:opacity-40'
               >
                 <RefreshCw
                   className={`h-3 w-3 ${isRegenerating ? 'animate-spin' : ''}`}
                 />
                 Regenerate
               </button>
-              <span className='text-zinc-800'>|</span>
+              <span className='text-[#CBD5E1]'>|</span>
               <button
                 onClick={() => setIsEditing(!isEditing)}
-                className='flex items-center gap-1 text-[11px] text-zinc-500 hover:text-zinc-300 transition-colors'
+                className='flex items-center gap-1 text-[11px] text-[#64748B] hover:text-[#0F172A] transition-colors'
               >
                 <Edit3 className='h-3 w-3' />
                 {isEditing ? 'Done' : 'Edit'}
@@ -186,7 +186,7 @@ export function WhatsAppModal() {
           </div>
 
           {isGeneratingMessage || isRegenerating ? (
-            <div className='flex items-center gap-2.5 rounded-xl border border-zinc-800 bg-zinc-800/50 p-4 text-sm text-zinc-500'>
+            <div className='flex items-center gap-2.5 rounded-xl border border-zinc-800 bg-zinc-800/50 p-4 text-sm text-[#64748B]'>
               <Loader2 className='h-4 w-4 animate-spin text-blue-400' />
               {isRegenerating
                 ? 'Loading next variation…'
@@ -210,14 +210,14 @@ export function WhatsAppModal() {
         <div className='flex gap-2 border-t border-zinc-800 px-5 py-4'>
           <button
             onClick={closeWhatsAppModal}
-            className='flex-1 rounded-lg border border-zinc-700 py-2 text-sm font-medium text-zinc-500 hover:border-zinc-600 hover:text-zinc-300 transition-colors'
+            className='flex-1 rounded-lg border border-zinc-700 py-2 text-sm font-medium text-[#64748B] hover:border-zinc-600 hover:text-[#0F172A] transition-colors'
           >
             Skip
           </button>
           <button
             onClick={handleSend}
             disabled={isGeneratingMessage}
-            className='flex flex-1 items-center justify-center gap-2 rounded-lg bg-emerald-600 py-2 text-sm font-semibold text-white hover:bg-emerald-500 disabled:opacity-50 transition-colors'
+            className='flex flex-1 items-center justify-center gap-2 rounded-lg py-2 text-sm font-semibold text-white disabled:opacity-50 transition-colors' style={{ background: '#059669' }} onMouseOver={e=>(e.currentTarget.style.background='#047857')} onMouseOut={e=>(e.currentTarget.style.background='#059669')}
           >
             <Send className='h-3.5 w-3.5' /> Send Now
           </button>

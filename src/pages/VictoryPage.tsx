@@ -71,7 +71,7 @@ export function VictoryPage() {
               <h1 className='font-display text-2xl font-800 tracking-tight text-zinc-50'>
                 Razorpay Advancing
               </h1>
-              <p className='mt-1 text-sm text-zinc-500'>
+              <p className='mt-1 text-sm text-[#64748B]'>
                 Deal jumped from 68% to 90% health. Close imminent.
               </p>
               <div className='mt-4 flex items-center justify-center gap-2 flex-wrap'>
@@ -107,7 +107,7 @@ export function VictoryPage() {
               <p className='text-xs font-semibold text-zinc-100'>
                 {MEETING.title}
               </p>
-              <div className='mt-1.5 flex items-center gap-3 text-[11px] text-zinc-500'>
+              <div className='mt-1.5 flex items-center gap-3 text-[11px] text-[#64748B]'>
                 <span className='flex items-center gap-1'>
                   <Calendar className='h-3 w-3' />
                   {MEETING.date}
@@ -118,11 +118,11 @@ export function VictoryPage() {
                 </span>
                 <span>{MEETING.duration}</span>
               </div>
-              <p className='mt-1.5 text-[11px] text-zinc-600'>
+              <p className='mt-1.5 text-[11px] text-[#475569]'>
                 Invite → {MEETING.attendees.join(', ')}
               </p>
               <div className='mt-2.5 space-y-1'>
-                <p className='text-[10px] font-semibold uppercase tracking-wider text-zinc-600'>
+                <p className='text-[10px] font-semibold uppercase tracking-wider text-[#475569]'>
                   Auto-generated agenda
                 </p>
                 {MEETING.agenda.map((item, i) => (
@@ -157,7 +157,7 @@ export function VictoryPage() {
               <p className='font-mono text-xs font-semibold text-zinc-300'>
                 DPDP_compliance_doc.pdf
               </p>
-              <p className='text-[10px] text-zinc-600 mt-0.5'>
+              <p className='text-[10px] text-[#475569] mt-0.5'>
                 Sent to 3 recipients
               </p>
             </div>
@@ -173,10 +173,10 @@ export function VictoryPage() {
                     <p className='text-[11px] font-semibold text-zinc-300'>
                       {contact.full_name}
                     </p>
-                    <p className='text-[10px] text-zinc-600'>{contact.email}</p>
+                    <p className='text-[10px] text-[#475569]'>{contact.email}</p>
                   </div>
                   <span
-                    className={`text-[10px] font-medium ${opened ? 'text-emerald-400' : 'text-zinc-600'}`}
+                    className={`text-[10px] font-medium ${opened ? 'text-emerald-400' : 'text-[#475569]'}`}
                   >
                     {status}
                   </span>
@@ -201,7 +201,7 @@ export function VictoryPage() {
             <div className='space-y-2'>
               {NEXT_STEPS.map((s, i) => (
                 <div key={i} className='flex items-start gap-2.5'>
-                  <span className='flex h-4 w-4 shrink-0 items-center justify-center rounded-full bg-zinc-800 border border-zinc-700 font-mono text-[9px] font-semibold text-zinc-500 mt-0.5'>
+                  <span className='flex h-4 w-4 shrink-0 items-center justify-center rounded-full bg-zinc-800 border border-zinc-700 font-mono text-[9px] font-semibold text-[#64748B] mt-0.5'>
                     {i + 1}
                   </span>
                   <p className='text-[11px] text-zinc-400 leading-relaxed'>
@@ -217,7 +217,7 @@ export function VictoryPage() {
           <div className='flex gap-3 animate-fade-in pb-4'>
             <button
               onClick={() => navigate('/deals/abc-corp-deal-001')}
-              className='flex-1 rounded-xl border border-zinc-700 py-2.5 text-sm font-medium text-zinc-500 hover:border-zinc-600 hover:text-zinc-300 transition-colors'
+              className='flex-1 rounded-xl border border-zinc-700 py-2.5 text-sm font-medium text-[#64748B] hover:border-zinc-600 hover:text-[#0F172A] transition-colors'
             >
               Return to Deal Room
             </button>

@@ -64,7 +64,7 @@ export function OrgChartCanvas({ dealContacts, onContactSelect }: Props) {
             ].map(({ dot, label }) => (
               <div key={label} className="flex items-center gap-1.5">
                 <span className={`h-2 w-2 rounded-full shrink-0 ${dot}`} />
-                <span className="text-zinc-500 whitespace-nowrap">{label}</span>
+                <span className="text-[#64748B] whitespace-nowrap">{label}</span>
               </div>
             ))}
           </div>

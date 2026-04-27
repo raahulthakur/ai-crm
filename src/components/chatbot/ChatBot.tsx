@@ -43,15 +43,19 @@ interface ChatMessage {
 
 // ─── Constants ────────────────────────────────────────────────────────────────
 
-// Natural language voice-to-text samples with real Indian company names
+// Natural language voice-to-text samples — 8 varied prompts, real Indian companies
 const VOICE_SAMPLES = [
-  'Hey, just got off a call with Razorpay. They want to move forward — about 65 lakhs ARR, currently in negotiation',
+  "Hey, just got off a call with Razorpay. They want to move forward — about 65 lakhs ARR, currently in negotiation",
   "Add Freshworks to the pipeline. We had a great demo, they're at proposal stage, roughly 120 lakhs",
   "New deal — Zoho Corp. They've verbally committed, 80 lakhs ARR, still in discovery stage",
-  'Got a warm lead at PhonePe. 95 lakhs, negotiation stage, need to follow up this week',
+  "Got a warm lead at PhonePe. 95 lakhs, negotiation stage, need to follow up this week",
+  "Just had a great call with Meesho. Create a new deal — 55 lakhs, proposal stage. Very promising!",
+  "Add Zepto to the pipeline — about 70 lakhs ARR, they're in qualification stage. CTO is excited",
+  "Just spoke with CRED's procurement team. New deal, 140 lakhs potential, early discovery phase",
+  "Swiggy wants to move forward! Add a new deal, 85 lakhs ARR, they're at proposal stage now",
 ];
 
-const GREETING = `Hi! I'm your **Nexus AI** assistant. I can help you:
+const GREETING = `Hi! I'm your **CloseLoop AI** assistant. I can help you:
 • **Add deals** — "Add deal for Acme Corp, $650K, negotiation"
 • **Query anything** — "What is the ARR of Razorpay?"
 • **Find contacts** — "Who is the champion for Razorpay?"
@@ -108,39 +112,51 @@ function findDeal(lower: string, deals: Deal[]): Deal | undefined {
 function parseIntent(text: string, deals: Deal[]): ParseResult {
   const lower = text.toLowerCase();
 
-  // ── Create deal ────────────────────────────────────────────────────────
-  if (/\b(add|create|new deal|log|enter)\b/.test(lower)) {
-    // Company: grab text after "for/company" before comma or "arr/value/number"
-    const companyMatch =
-      text.match(
-        /(?:for|company|deal[,\s]+)\s*([A-Za-z][A-Za-z\s&.']+?)(?=\s*,|\s+(?:ARR|value|arr|\d))/i,
-      ) ??
-      text.match(
-        /\b([A-Z][a-zA-Z\s&.']+(?:Corp|Inc|Ltd|Solutions|India|Technologies|Tech|Pvt))\b/,
-      );
-    // ARR: any number — handle "lakhs" (×100000) and plain numbers
-    const arrMatches = [...text.matchAll(/([0-9][0-9,]*)/g)];
-    const rawNum =
-      arrMatches
-        .map((m) => parseInt(m[1].replace(/,/g, '')))
-        .find((n) => n >= 1) ?? 50;
-    const isLakh = /lakh/i.test(lower);
-    const arrNum = isLakh
-      ? rawNum * 100000
-      : rawNum < 1000
-        ? rawNum * 1000
-        : rawNum;
-    const stageMatch = Object.keys(STAGE_MAP).find((k) => lower.includes(k));
+  // ── Create deal — checked FIRST before any contact queries ────────────
+  // Broad trigger: explicit commands OR natural phrases like "warm lead", "just spoke with"
+  if (/\b(add|create|new deal|log|enter|warm lead|just got off|just spoke|just had|follow up this week|new pipeline)\b/.test(lower)) {
+    // Company extraction: try patterns in priority order
+    let companyName = 'New Company'
+
+    // P1: "at/with/for [Capitalized]" — handles "at PhonePe", "with Razorpay"
+    const atMatch = text.match(/\b(?:at|with|for)\s+([A-Z][a-zA-Z]+(?:\s+[A-Z][a-zA-Z]+)?)\b/)
+    if (atMatch?.[1] && !['The', 'A', 'An', 'Our', 'My', 'This'].includes(atMatch[1])) {
+      companyName = atMatch[1].trim()
+    } else {
+      // P2: "company/deal [Name]" before comma or ARR keyword
+      const kwMatch = text.match(/(?:company|deal[,\s]+)\s*([A-Za-z][A-Za-z\s&.']+?)(?=\s*,|\s+(?:ARR|value|arr|lakh|\d))/i)
+      if (kwMatch?.[1]) {
+        companyName = kwMatch[1].trim()
+      } else {
+        // P3: Known company suffixes
+        const sfxMatch = text.match(/\b([A-Z][a-zA-Z\s&.']+(?:Corp|Inc|Ltd|Solutions|India|Technologies|Tech|Pvt|Pay|works))\b/)
+        if (sfxMatch?.[1]) {
+          companyName = sfxMatch[1].trim()
+        } else {
+          // P4: First capitalized word right after "Add" or "Create"
+          const addMatch = text.match(/\b(?:Add|Create)\s+([A-Z][a-zA-Z]+)\b/)
+          if (addMatch?.[1]) companyName = addMatch[1].trim()
+        }
+      }
+    }
+
+    // ARR: handle "lakhs" (×100000) and plain numbers
+    const arrMatches = [...text.matchAll(/([0-9][0-9,]*)/g)]
+    const rawNum = arrMatches.map((m) => parseInt(m[1].replace(/,/g, ''))).find((n) => n >= 1) ?? 50
+    const isLakh = /lakh/i.test(lower)
+    const arrNum = isLakh ? rawNum * 100000 : rawNum < 1000 ? rawNum * 1000 : rawNum
+
+    const stageMatch = Object.keys(STAGE_MAP).find((k) => lower.includes(k))
 
     return {
       kind: 'create',
       deal: {
-        company_name: companyMatch?.[1]?.trim() ?? 'New Company',
-        arr_value: arrNum < 1000 ? arrNum * 1000 : arrNum,
+        company_name: companyName,
+        arr_value: arrNum,
         stage: stageMatch ? STAGE_MAP[stageMatch] : 'qualification',
         health_score: Math.floor(Math.random() * 30) + 60,
       },
-    };
+    }
   }
 
   // ── List all deals ─────────────────────────────────────────────────────
@@ -195,7 +211,7 @@ function parseIntent(text: string, deals: Deal[]): ParseResult {
   }
 
   // ── Contacts / champion / who ──────────────────────────────────────────
-  if (/\b(champion|who is|contact|ceo|cfo|cto|vp|head of|lead)\b/.test(lower)) {
+  if (/\b(champion|who is|contact|ceo|cfo|cto|vp|head of|team lead)\b/.test(lower)) {
     // Role-based search
     const roleKeywords: Record<string, string[]> = {
       champion: ['champion', 'advocate'],
@@ -409,14 +425,14 @@ function EditableDealCard({
   }
 
   return (
-    <div className='mt-2.5 rounded-xl border border-zinc-600 bg-zinc-900 p-3 space-y-2'>
+    <div className='mt-2.5 rounded-xl border border-[#CBD5E1] bg-white p-3 space-y-2'>
       <div className='flex items-center justify-between'>
-        <p className='text-[10px] font-bold uppercase tracking-wider text-zinc-500'>
+        <p className='text-[10px] font-bold uppercase tracking-wider text-[#64748B]'>
           New Deal Preview
         </p>
         <button
           onClick={() => setEditing((v) => !v)}
-          className='flex items-center gap-1 text-[10px] text-zinc-600 hover:text-amber-400 transition-colors'
+          className='flex items-center gap-1 text-[10px] text-[#475569] hover:text-amber-400 transition-colors'
         >
           <Edit3 className='h-2.5 w-2.5' /> {editing ? 'Done' : 'Edit'}
         </button>
@@ -431,7 +447,7 @@ function EditableDealCard({
                 <input
                   value={company}
                   onChange={(e) => setCompany(e.target.value)}
-                  className='w-full rounded-md border border-zinc-700 bg-zinc-800 px-2 py-1 text-[11px] text-zinc-100 outline-none focus:border-amber-400/50'
+                  className='w-full rounded-md border border-[#CBD5E1] bg-[#F8FAFC] px-2 py-1 text-[11px] text-[#0F172A] outline-none focus:border-[#059669]/50'
                 />
               ),
             },
@@ -441,7 +457,7 @@ function EditableDealCard({
                 <input
                   value={arr}
                   onChange={(e) => setArr(e.target.value)}
-                  className='w-full rounded-md border border-zinc-700 bg-zinc-800 px-2 py-1 text-[11px] font-mono text-zinc-100 outline-none focus:border-amber-400/50'
+                  className='w-full rounded-md border border-[#CBD5E1] bg-[#F8FAFC] px-2 py-1 text-[11px] font-mono text-[#0F172A] outline-none focus:border-[#059669]/50'
                 />
               ),
             },
@@ -451,7 +467,7 @@ function EditableDealCard({
                 <select
                   value={stage}
                   onChange={(e) => setStage(e.target.value as DealStage)}
-                  className='w-full rounded-md border border-zinc-700 bg-zinc-800 px-2 py-1 text-[11px] text-zinc-100 outline-none appearance-none cursor-pointer'
+                  className='w-full rounded-md border border-[#CBD5E1] bg-[#F8FAFC] px-2 py-1 text-[11px] text-[#0F172A] outline-none appearance-none cursor-pointer'
                 >
                   {ALL_STAGES.map((s) => (
                     <option key={s} value={s}>
@@ -466,7 +482,7 @@ function EditableDealCard({
               key={label}
               className='grid grid-cols-[60px_1fr] items-center gap-2'
             >
-              <span className='text-[10px] text-zinc-500'>{label}</span>
+              <span className='text-[10px] text-[#64748B]'>{label}</span>
               {node}
             </div>
           ))}
@@ -480,8 +496,8 @@ function EditableDealCard({
             ['Health', `${health}% (auto)`],
           ].map(([k, v]) => (
             <div key={k} className='flex items-center justify-between'>
-              <span className='text-[10px] text-zinc-500'>{k}</span>
-              <span className='font-mono text-[11px] font-semibold text-zinc-200'>
+              <span className='text-[10px] text-[#64748B]'>{k}</span>
+              <span className='font-mono text-[11px] font-semibold text-[#0F172A]'>
                 {v}
               </span>
             </div>
@@ -493,13 +509,13 @@ function EditableDealCard({
         <button
           onClick={confirm}
           className='flex flex-1 items-center justify-center gap-1.5 rounded-lg py-1.5 text-[11px] font-semibold transition-all'
-          style={{ background: '#e3ffcc', color: '#131414' }}
+          style={{ background: '#059669', color: '#ffffff' }}
         >
           <CheckCircle2 className='h-3.5 w-3.5' /> Create Deal
         </button>
         <button
           onClick={onCancel}
-          className='flex flex-1 items-center justify-center gap-1.5 rounded-lg border border-zinc-700 py-1.5 text-[11px] font-medium text-zinc-400 hover:text-zinc-200 transition-colors'
+          className='flex flex-1 items-center justify-center gap-1.5 rounded-lg border border-[#CBD5E1] py-1.5 text-[11px] font-medium text-[#64748B] hover:text-[#0F172A] transition-colors'
         >
           <XCircle className='h-3.5 w-3.5' /> Cancel
         </button>
@@ -544,6 +560,7 @@ export function ChatBot() {
   const inputRef = useRef<HTMLInputElement>(null);
   const typewriterRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const listeningTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const lastVoiceIdxRef = useRef<number>(-1);
 
   useEffect(() => {
     if (isOpen && messages.length === 0) {
@@ -579,9 +596,12 @@ export function ChatBot() {
 
     listeningTimerRef.current = setTimeout(() => {
       setIsListening(false);
-      const sample =
-        VOICE_SAMPLES[Math.floor(Math.random() * VOICE_SAMPLES.length)];
-      typewriterFill(sample);
+      // Pick a sample that wasn't used last time (no consecutive repeats)
+      let idx: number;
+      do { idx = Math.floor(Math.random() * VOICE_SAMPLES.length) }
+      while (idx === lastVoiceIdxRef.current && VOICE_SAMPLES.length > 1);
+      lastVoiceIdxRef.current = idx;
+      typewriterFill(VOICE_SAMPLES[idx]);
     }, 3000);
   }
 
@@ -725,15 +745,15 @@ export function ChatBot() {
             </div>
             <div className='flex-1'>
               <p className='font-display text-sm font-700 text-zinc-50'>
-                Nexus AI
+                CloseLoop AI
               </p>
-              <p className='text-[10px] text-zinc-600'>
+              <p className='text-[10px] text-[#475569]'>
                 Ask anything about your pipeline
               </p>
             </div>
             <button
               onClick={() => setIsOpen(false)}
-              className='rounded-lg p-1 text-zinc-600 hover:text-zinc-300 transition-colors'
+              className='rounded-lg p-1 text-[#475569] hover:text-[#0F172A] transition-colors'
             >
               <X className='h-4 w-4' />
             </button>
@@ -754,23 +774,23 @@ export function ChatBot() {
                 <div
                   className={`max-w-[80%] rounded-2xl px-3.5 py-2.5 text-[12px] leading-relaxed ${
                     msg.role === 'user'
-                      ? 'rounded-br-sm bg-amber-400/15 text-zinc-100 border border-amber-400/20'
-                      : 'rounded-bl-sm bg-zinc-800 text-zinc-300 border border-zinc-700/50'
+                      ? 'rounded-br-sm bg-[#ECFDF5] text-[#1F2937] border border-[#10B981]/30'
+                      : 'rounded-bl-sm bg-[#F3F4F6] text-[#1F2937] border border-[#E5E7EB]'
                   }`}
                 >
                   {msg.listDeals ? (
                     <div className='space-y-1.5'>
-                      <p className='text-[10px] font-bold uppercase tracking-wider text-zinc-500 mb-2'>
+                      <p className='text-[10px] font-bold uppercase tracking-wider text-[#64748B] mb-2'>
                         All Deals ({msg.listDeals.length})
                       </p>
                       {msg.listDeals.map((d) => (
                         <div
                           key={d.id}
-                          className='flex items-center justify-between gap-2 rounded-lg bg-zinc-700/40 px-2.5 py-1.5'
+                          className='flex items-center justify-between gap-2 rounded-lg bg-[#F1F5F9] px-2.5 py-1.5'
                         >
                           <div className='flex items-center gap-1.5 min-w-0'>
                             <BarChart3 className='h-3 w-3 text-amber-400 shrink-0' />
-                            <span className='text-xs font-semibold text-zinc-200 truncate'>
+                            <span className='text-xs font-semibold text-[#0F172A] truncate'>
                               {d.company_name}
                             </span>
                           </div>
@@ -807,7 +827,7 @@ export function ChatBot() {
                 <div className='flex h-6 w-6 items-center justify-center rounded-full bg-amber-400'>
                   <Zap className='h-3 w-3 fill-zinc-950 text-zinc-950' />
                 </div>
-                <div className='rounded-2xl rounded-bl-sm bg-zinc-800 border border-zinc-700/50 px-4 py-3'>
+                <div className='rounded-2xl rounded-bl-sm bg-[#F3F4F6] border border-[#E5E7EB] px-4 py-3'>
                   <div className='flex gap-1'>
                     <span className='typing-dot h-1.5 w-1.5 rounded-full bg-zinc-500' />
                     <span className='typing-dot h-1.5 w-1.5 rounded-full bg-zinc-500' />
@@ -825,7 +845,7 @@ export function ChatBot() {
               {isListening ? (
                 <div className='flex flex-1 items-center gap-2'>
                   <WaveformAnimation />
-                  <span className='text-[11px] text-zinc-600'>Listening…</span>
+                  <span className='text-[11px] text-[#475569]'>Listening…</span>
                 </div>
               ) : (
                 <input
@@ -834,7 +854,7 @@ export function ChatBot() {
                   onChange={(e) => setInputText(e.target.value)}
                   onKeyDown={(e) => e.key === 'Enter' && sendMessage()}
                   placeholder='Ask anything or "add deal…"'
-                  className='flex-1 bg-transparent text-sm text-zinc-200 placeholder-zinc-600 outline-none'
+                  className='flex-1 bg-transparent text-sm text-[#0F172A] placeholder-[#94A3B8] outline-none'
                 />
               )}
               <div className='flex items-center gap-1.5 shrink-0'>
@@ -850,7 +870,7 @@ export function ChatBot() {
                 ) : (
                   <button
                     onClick={startVoice}
-                    className='flex h-7 w-7 items-center justify-center rounded-lg text-zinc-500 hover:bg-zinc-700 hover:text-amber-400 transition-colors'
+                    className='flex h-7 w-7 items-center justify-center rounded-lg text-[#64748B] hover:bg-zinc-700 hover:text-amber-400 transition-colors'
                     title='Voice input'
                   >
                     <Mic className='h-3.5 w-3.5' />
@@ -862,15 +882,15 @@ export function ChatBot() {
                   className='flex h-7 w-7 items-center justify-center rounded-lg transition-all disabled:opacity-30'
                   style={{
                     background:
-                      inputText.trim() && !isListening ? '#e3ffcc' : undefined,
-                    color: '#131414',
+                      inputText.trim() && !isListening ? '#059669' : undefined,
+                    color: '#ffffff',
                   }}
                 >
                   <Send className='h-3.5 w-3.5' />
                 </button>
               </div>
             </div>
-            <p className='mt-1.5 text-center text-[10px] text-zinc-700'>
+            <p className='mt-1.5 text-center text-[10px] text-[#94A3B8]'>
               "Who is the champion?" · "Total pipeline?" · "Add deal for Acme,
               $650K"
             </p>
@@ -882,13 +902,13 @@ export function ChatBot() {
       <button
         onClick={() => setIsOpen((v) => !v)}
         className='fixed bottom-6 right-6 z-50 flex h-14 w-14 items-center justify-center rounded-2xl shadow-2xl transition-all hover:scale-105 active:scale-95'
-        style={{ background: '#e3ffcc' }}
+        style={{ background: '#059669' }}
         title='Open AI Assistant'
       >
         {isOpen ? (
-          <X className='h-6 w-6 text-zinc-950' />
+          <X className='h-6 w-6 text-white' />
         ) : (
-          <MessageSquare className='h-6 w-6 text-zinc-950' />
+          <MessageSquare className='h-6 w-6 text-white' />
         )}
         {!isOpen && (
           <span className='absolute -right-1 -top-1 flex h-4 w-4 items-center justify-center rounded-full bg-amber-400'>

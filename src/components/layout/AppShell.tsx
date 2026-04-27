@@ -169,7 +169,7 @@ export function AppShell() {
           </div>
           <div>
             <span className='font-display text-sm font-700 tracking-tight text-zinc-50'>
-              Nexus
+              CloseLoop
             </span>
             <span className='ml-1 rounded bg-amber-400/20 px-1 py-0.5 text-[9px] font-bold text-amber-400'>
               AI
@@ -180,7 +180,7 @@ export function AppShell() {
         <nav className='flex-1 overflow-y-auto px-2 pb-2'>
           {NAV_SECTIONS.map((section) => (
             <div key={section.label} className='mb-3'>
-              <p className='px-3 pb-1 text-[9px] font-semibold uppercase tracking-widest text-zinc-700'>
+              <p className='px-3 pb-1 text-[9px] font-semibold uppercase tracking-widest text-[#64748B]'>
                 {section.label}
               </p>
               {section.items.map(({ to, label, icon: Icon, badge }) => {
@@ -192,8 +192,8 @@ export function AppShell() {
                     className={cn(
                       'group relative mb-0.5 flex items-center gap-2.5 rounded-lg px-3 py-2 text-sm font-medium transition-all duration-150',
                       active
-                        ? 'bg-zinc-800 text-zinc-50'
-                        : 'text-zinc-500 hover:bg-zinc-900 hover:text-zinc-300',
+                        ? 'bg-[#ECFDF5] text-[#065F46]'
+                        : 'text-[#64748B] hover:bg-zinc-900 hover:text-[#0F172A]',
                     )}
                   >
                     {active && (
@@ -203,8 +203,8 @@ export function AppShell() {
                       className={cn(
                         'h-3.5 w-3.5 shrink-0',
                         active
-                          ? 'text-amber-400'
-                          : 'text-zinc-600 group-hover:text-zinc-400',
+                          ? 'text-[#059669]'
+                          : 'text-[#475569] group-hover:text-[#475569]',
                       )}
                     />
                     <span className='flex-1'>{label}</span>
@@ -214,7 +214,7 @@ export function AppShell() {
                       </span>
                     )}
                     {active && (
-                      <ChevronRight className='h-3 w-3 text-zinc-600' />
+                      <ChevronRight className='h-3 w-3 text-[#059669]' />
                     )}
                   </Link>
                 );
@@ -233,9 +233,9 @@ export function AppShell() {
               <p className='truncate text-xs font-semibold text-zinc-300'>
                 Rahul Thakur
               </p>
-              <p className='text-[10px] text-zinc-600'>Admin</p>
+              <p className='text-[10px] text-[#475569]'>Admin</p>
             </div>
-            <Settings className='h-3.5 w-3.5 text-zinc-700 hover:text-zinc-400 transition-colors' />
+            <Settings className='h-3.5 w-3.5 text-[#94A3B8] hover:text-[#475569] transition-colors' />
           </div>
         </div>
       </aside>
@@ -250,7 +250,7 @@ export function AppShell() {
           {/* Bell button */}
           <button
             onClick={() => setNotifOpen((v) => !v)}
-            className='relative rounded-lg p-1.5 text-zinc-500 transition-colors hover:bg-zinc-900 hover:text-zinc-300'
+            className='relative rounded-lg p-1.5 text-[#64748B] transition-colors hover:bg-zinc-900 hover:text-[#0F172A]'
           >
             <Bell className='h-4 w-4' />
             {unread > 0 && (
@@ -268,7 +268,7 @@ export function AppShell() {
               </p>
               <button
                 onClick={() => setNotifOpen(false)}
-                className='text-zinc-600 hover:text-zinc-400 transition-colors'
+                className='text-[#475569] hover:text-[#475569] transition-colors'
               >
                 <X className='h-4 w-4' />
               </button>
@@ -307,11 +307,11 @@ export function AppShell() {
                       <p className='text-xs font-semibold text-zinc-200'>
                         {n.title}
                       </p>
-                      <span className='text-[10px] text-zinc-600 shrink-0'>
+                      <span className='text-[10px] text-[#475569] shrink-0'>
                         {n.time}
                       </span>
                     </div>
-                    <p className='text-[11px] text-zinc-500 mt-0.5 leading-relaxed'>
+                    <p className='text-[11px] text-[#64748B] mt-0.5 leading-relaxed'>
                       {n.body}
                     </p>
                   </div>
@@ -347,13 +347,13 @@ export function AppShell() {
               <p className='text-xs font-semibold text-zinc-100'>
                 {toast.title}
               </p>
-              <p className='text-[11px] text-zinc-500 mt-0.5 leading-relaxed'>
+              <p className='text-[11px] text-[#64748B] mt-0.5 leading-relaxed'>
                 {toast.subtitle}
               </p>
             </div>
             <button
               onClick={() => removeToast(toast.id)}
-              className='text-zinc-600 hover:text-zinc-400 transition-colors shrink-0'
+              className='text-[#475569] hover:text-[#475569] transition-colors shrink-0'
             >
               <X className='h-3.5 w-3.5' />
             </button>

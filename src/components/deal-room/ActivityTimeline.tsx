@@ -47,9 +47,9 @@ const ICON_COLOR: Record<ActivityType, string> = {
   call_completed: 'text-amber-400',
   meeting_booked: 'text-blue-400',
   document_sent: 'text-teal-400',
-  ai_insight_generated: 'text-zinc-500',
+  ai_insight_generated: 'text-[#64748B]',
   score_updated: 'text-blue-400',
-  note_added: 'text-zinc-500',
+  note_added: 'text-[#64748B]',
 }
 
 export function ActivityTimeline() {
@@ -60,7 +60,7 @@ export function ActivityTimeline() {
 
   return (
     <div className="space-y-2.5">
-      <h3 className="text-[10px] font-semibold uppercase tracking-widest text-zinc-600">Activity Timeline</h3>
+      <h3 className="text-[10px] font-semibold uppercase tracking-widest text-[#475569]">Activity Timeline</h3>
       <div className="space-y-0">
         {sorted.map((activity, idx) => {
           const cfg = TIMELINE_CONFIG[activity.type]
@@ -92,7 +92,7 @@ export function ActivityTimeline() {
                   )}
                 </div>
                 {activity.description && (
-                  <p className="mt-0.5 text-[10px] italic leading-relaxed text-zinc-600">{activity.description}</p>
+                  <p className="mt-0.5 text-[10px] italic leading-relaxed text-[#475569]">{activity.description}</p>
                 )}
                 <div className="mt-0.5 flex items-center gap-1.5 text-[10px] text-zinc-700">
                   <Clock className="h-2.5 w-2.5" />

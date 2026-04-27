@@ -25,7 +25,7 @@ const AVATAR_COLORS: Record<string, { bg: string; text: string }> = {
 const STATUS_LABELS: Record<string, { text: string; color: string }> = {
   champion:      { text: 'Champion',      color: 'text-emerald-400' },
   blocked:       { text: 'Blocked',       color: 'text-rose-400' },
-  not_contacted: { text: 'Not Contacted', color: 'text-zinc-500' },
+  not_contacted: { text: 'Not Contacted', color: 'text-[#64748B]' },
   neutral:       { text: 'Neutral',       color: 'text-blue-400' },
   engaged:       { text: 'Engaged',       color: 'text-blue-400' },
   unresponsive:  { text: 'Unresponsive',  color: 'text-amber-400' },
@@ -71,7 +71,7 @@ export const ContactNode = memo(({ data }: { data: NodeData }) => {
         )}
         <div className="min-w-0 flex-1">
           <p className="truncate text-[11px] font-bold text-zinc-100 leading-tight">{contact.full_name}</p>
-          <p className="truncate text-[10px] text-zinc-500 leading-tight mt-0.5">{contact.job_title}</p>
+          <p className="truncate text-[10px] text-[#64748B] leading-tight mt-0.5">{contact.job_title}</p>
         </div>
       </div>
 

@@ -60,13 +60,13 @@ export function BookMeetingCard({ actionId, contactName, contactEmail }: Props) 
   if (state === 'booked') {
     const [day, time] = (selected ?? '').split(' | ')
     return (
-      <div className="mt-3 rounded-xl border border-blue-500/20 bg-blue-500/5 p-3.5 animate-fade-in">
+      <div className="mt-3 rounded-xl border border-[#10B981]/20 bg-[#ECFDF5] p-3.5 animate-fade-in">
         <div className="flex items-start gap-2.5">
           <div className="shrink-0 mt-0.5"><CalendarIcon /></div>
           <div>
-            <p className="text-xs font-semibold text-blue-300">Meeting scheduled!</p>
-            <p className="text-[11px] text-blue-400/80 mt-0.5">{contactName} · {day} at {time}</p>
-            <p className="text-[11px] text-blue-500/60 mt-1">Calendar invite sent to {contactEmail}</p>
+            <p className="text-xs font-semibold text-[#059669]">Meeting scheduled!</p>
+            <p className="text-[11px] text-[#059669]/80 mt-0.5">{contactName} · {day} at {time}</p>
+            <p className="text-[11px] text-[#059669]/60 mt-1">Calendar invite sent to {contactEmail}</p>
           </div>
         </div>
       </div>
@@ -74,14 +74,14 @@ export function BookMeetingCard({ actionId, contactName, contactEmail }: Props) 
   }
 
   return (
-    <div className="mt-3 rounded-xl border border-blue-500/20 bg-blue-500/5 p-3.5 space-y-3">
-      <p className="text-[11px] font-semibold text-blue-300 flex items-center gap-1.5">
+    <div className="mt-3 rounded-xl border border-[#10B981]/20 bg-[#ECFDF5] p-3.5 space-y-3">
+      <p className="text-[11px] font-semibold text-[#059669] flex items-center gap-1.5">
         <Calendar className="h-3 w-3" /> Select a time slot
       </p>
       <div className="grid grid-cols-3 gap-2">
         {SLOTS.map(({ day, slots }) => (
           <div key={day}>
-            <p className="text-[9px] font-semibold text-zinc-600 mb-1.5 uppercase tracking-wider">{day}</p>
+            <p className="text-[9px] font-semibold text-[#475569] mb-1.5 uppercase tracking-wider">{day}</p>
             <div className="space-y-1.5">
               {slots.map((time) => {
                 const key = `${day} | ${time}`
@@ -90,8 +90,8 @@ export function BookMeetingCard({ actionId, contactName, contactEmail }: Props) 
                     className={cn(
                       'w-full rounded-lg border px-2 py-1.5 text-[10px] font-mono font-medium text-left transition-all',
                       selected === key
-                        ? 'border-blue-500/60 bg-blue-500/20 text-blue-300'
-                        : 'border-zinc-700/50 bg-zinc-800/50 text-zinc-400 hover:border-blue-500/30 hover:text-blue-400'
+                        ? 'border-blue-500/60 bg-blue-500/20 text-[#059669]'
+                        : 'border-[#CBD5E1] bg-white text-[#0F172A] hover:border-[#059669]/50 hover:text-[#059669]'
                     )}>
                     {time}
                   </button>
@@ -102,7 +102,8 @@ export function BookMeetingCard({ actionId, contactName, contactEmail }: Props) 
         ))}
       </div>
       <button onClick={handleSchedule} disabled={!selected || state === 'scheduling'}
-        className="w-full flex items-center justify-center gap-2 rounded-lg bg-blue-600 py-2 text-xs font-semibold text-white hover:bg-blue-500 disabled:opacity-40 disabled:cursor-not-allowed transition-all">
+        style={{ background: '#059669' }}
+        className="w-full flex items-center justify-center gap-2 rounded-lg py-2 text-xs font-semibold text-white disabled:opacity-40 disabled:cursor-not-allowed transition-all hover:opacity-90">
         {state === 'scheduling'
           ? <><Loader2 className="h-3.5 w-3.5 animate-spin" /> Scheduling…</>
           : <><Calendar className="h-3.5 w-3.5" /> Schedule Now</>}

@@ -34,7 +34,7 @@ export function DealRoomPage() {
   }, [id])
 
   const deal = activeDeal ?? deals.find((d) => d.id === id)
-  if (!deal) return <div className="p-8 text-zinc-600">Deal not found</div>
+  if (!deal) return <div className="p-8 text-[#475569]">Deal not found</div>
 
   const scoreDelta = deal.health_score_prev != null ? deal.health_score - deal.health_score_prev : null
   const deltaKey = scoreDelta != null ? String(scoreDelta) : ''
@@ -46,20 +46,20 @@ export function DealRoomPage() {
       {/* Deal header */}
       <div className="flex items-center gap-3 border-b border-zinc-800 bg-zinc-900 px-5 py-3">
         <button onClick={() => navigate('/deals')}
-          className="rounded-lg p-1.5 text-zinc-600 transition-colors hover:bg-zinc-800 hover:text-zinc-300">
+          className="rounded-lg p-1.5 text-[#475569] transition-colors hover:bg-zinc-800 hover:text-[#0F172A]">
           <ArrowLeft className="h-4 w-4" />
         </button>
 
         <div className="flex flex-1 items-center gap-3 min-w-0">
           <div className="min-w-0 flex-1">
             <div className="flex items-center gap-2">
-              {deal.is_stuck && <AlertTriangle className="h-3.5 w-3.5 shrink-0 text-rose-400" />}
+              {deal.is_stuck && <AlertTriangle className="h-3.5 w-3.5 shrink-0 text-red-700" />}
               <h2 className="font-display text-sm font-700 tracking-tight text-zinc-50 truncate">{deal.company_name}</h2>
               <span className="text-zinc-700">·</span>
               <span className="font-mono text-sm font-semibold text-amber-400 shrink-0">{formatCurrency(deal.arr_value)} ARR</span>
             </div>
             {deal.stuck_reason && (
-              <p className="text-xs text-rose-400/80 mt-0.5">{deal.stuck_reason}</p>
+              <p className="text-xs text-red-700 mt-0.5">{deal.stuck_reason}</p>
             )}
           </div>
 
@@ -95,7 +95,7 @@ export function DealRoomPage() {
         {/* Org chart */}
         <div className="flex w-[54%] flex-col border-r border-zinc-800 overflow-hidden">
           <div className="border-b border-zinc-800 bg-zinc-900/30 px-4 py-2 flex items-center justify-between">
-            <h3 className="text-[10px] font-semibold uppercase tracking-widest text-zinc-600">Buying Committee</h3>
+            <h3 className="text-[10px] font-semibold uppercase tracking-widest text-[#475569]">Buying Committee</h3>
             <span className="text-[10px] text-zinc-700">Click a contact for details</span>
           </div>
           <div className="flex-1">

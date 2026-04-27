@@ -24,11 +24,11 @@ export function WIPPage() {
       {/* Page hint */}
       <div className="mt-4 rounded-lg border border-zinc-800 bg-zinc-900/60 px-4 py-2">
         <span className="font-mono text-sm text-amber-400">{pageName}</span>
-        <span className="text-sm text-zinc-600"> is still being built.</span>
+        <span className="text-sm text-[#475569]"> is still being built.</span>
       </div>
 
       {/* Subtext */}
-      <p className="mt-4 max-w-xs text-xs leading-relaxed text-zinc-600">
+      <p className="mt-4 max-w-xs text-xs leading-relaxed text-[#475569]">
         This feature is on the roadmap. For now, head back to the Deals workspace where the magic happens.
       </p>
 
