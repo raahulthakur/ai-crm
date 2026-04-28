@@ -7,23 +7,23 @@ export function WIPPage() {
   const pageName = location.pathname.replace('/', '').replace(/^./, (c) => c.toUpperCase()) || 'This page'
 
   return (
-    <div className="flex h-full flex-col items-center justify-center bg-zinc-950 px-6 text-center">
+    <div className="flex h-full flex-col items-center justify-center bg-[#FAFBFC] px-6 text-center">
       {/* Icon */}
-      <div className="mb-6 flex h-20 w-20 items-center justify-center rounded-3xl border border-zinc-700/50 bg-zinc-900">
-        <Construction className="h-9 w-9 text-amber-400" />
+      <div className="mb-6 flex h-20 w-20 items-center justify-center rounded-3xl border border-[#E5E7EB] bg-white">
+        <Construction className="h-9 w-9 text-[#059669]" />
       </div>
 
       {/* Headline */}
-      <h1 className="font-display text-2xl font-800 tracking-tight text-zinc-50">
+      <h1 className="font-display text-2xl font-800 tracking-tight text-[#0F172A]">
         Ohh hoo.
       </h1>
-      <p className="mt-2 text-base text-zinc-400">
+      <p className="mt-2 text-base text-[#475569]">
         You've hit a work-in-progress page.
       </p>
 
       {/* Page hint */}
-      <div className="mt-4 rounded-lg border border-zinc-800 bg-zinc-900/60 px-4 py-2">
-        <span className="font-mono text-sm text-amber-400">{pageName}</span>
+      <div className="mt-4 rounded-lg border border-[#E5E7EB] bg-[#F8FAFC] px-4 py-2">
+        <span className="font-mono text-sm text-[#059669]">{pageName}</span>
         <span className="text-sm text-[#475569]"> is still being built.</span>
       </div>
 

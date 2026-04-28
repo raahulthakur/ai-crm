@@ -94,11 +94,11 @@ export function ActivityTimeline() {
                 {activity.description && (
                   <p className="mt-0.5 text-[10px] italic leading-relaxed text-[#475569]">{activity.description}</p>
                 )}
-                <div className="mt-0.5 flex items-center gap-1.5 text-[10px] text-zinc-700">
+                <div className="mt-0.5 flex items-center gap-1.5 text-[10px] text-[#64748B]">
                   <Clock className="h-2.5 w-2.5" />
                   {timeAgo(activity.occurred_at)}
                   {activity.contact && (
-                    <><span className="text-zinc-800">·</span><span>{activity.contact.full_name}</span></>
+                    <><span className="text-[#CBD5E1]">·</span><span>{activity.contact.full_name}</span></>
                   )}
                 </div>
               </div>

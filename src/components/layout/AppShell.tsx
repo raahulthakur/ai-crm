@@ -230,7 +230,7 @@ export function AppShell() {
               RT
             </div>
             <div className='flex-1 min-w-0'>
-              <p className='truncate text-xs font-semibold text-zinc-300'>
+              <p className='truncate text-xs font-semibold text-[#0F172A]'>
                 Rahul Thakur
               </p>
               <p className='text-[10px] text-[#475569]'>Admin</p>
@@ -243,7 +243,7 @@ export function AppShell() {
       {/* Main */}
       <div className='flex flex-1 flex-col overflow-hidden'>
         <header className='flex h-11 items-center justify-between border-b border-zinc-800 bg-zinc-950/90 px-5 backdrop-blur-sm'>
-          <h1 className='font-display text-sm font-600 tracking-tight text-zinc-200'>
+          <h1 className='font-display text-sm font-600 tracking-tight text-[#0F172A]'>
             {pageTitle}
           </h1>
 
@@ -263,7 +263,7 @@ export function AppShell() {
         {notifOpen && (
           <div className='fixed top-12 right-4 z-[200] w-80 rounded-xl border border-zinc-700/60 bg-zinc-900 shadow-2xl animate-fade-in'>
             <div className='flex items-center justify-between border-b border-zinc-800 px-4 py-3'>
-              <p className='font-display text-sm font-600 text-zinc-200'>
+              <p className='font-display text-sm font-600 text-[#0F172A]'>
                 Notifications
               </p>
               <button
@@ -304,7 +304,7 @@ export function AppShell() {
                   </div>
                   <div className='flex-1 min-w-0'>
                     <div className='flex items-center justify-between gap-2'>
-                      <p className='text-xs font-semibold text-zinc-200'>
+                      <p className='text-xs font-semibold text-[#0F172A]'>
                         {n.title}
                       </p>
                       <span className='text-[10px] text-[#475569] shrink-0'>

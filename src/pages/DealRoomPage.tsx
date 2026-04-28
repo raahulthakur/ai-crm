@@ -44,7 +44,7 @@ export function DealRoomPage() {
   return (
     <div className="flex h-full flex-col overflow-hidden bg-zinc-950">
       {/* Deal header */}
-      <div className="flex items-center gap-3 border-b border-zinc-800 bg-zinc-900 px-5 py-3">
+      <div className="flex items-center gap-3 border-b border-[#E5E7EB] bg-white px-5 py-3">
         <button onClick={() => navigate('/deals')}
           className="rounded-lg p-1.5 text-[#475569] transition-colors hover:bg-zinc-800 hover:text-[#0F172A]">
           <ArrowLeft className="h-4 w-4" />
@@ -54,8 +54,8 @@ export function DealRoomPage() {
           <div className="min-w-0 flex-1">
             <div className="flex items-center gap-2">
               {deal.is_stuck && <AlertTriangle className="h-3.5 w-3.5 shrink-0 text-red-700" />}
-              <h2 className="font-display text-sm font-700 tracking-tight text-zinc-50 truncate">{deal.company_name}</h2>
-              <span className="text-zinc-700">·</span>
+              <h2 className="font-display text-sm font-700 tracking-tight text-[#0F172A] truncate">{deal.company_name}</h2>
+              <span className="text-[#CBD5E1]">·</span>
               <span className="font-mono text-sm font-semibold text-amber-400 shrink-0">{formatCurrency(deal.arr_value)} ARR</span>
             </div>
             {deal.stuck_reason && (
@@ -77,11 +77,11 @@ export function DealRoomPage() {
 
                 {/* Tooltip below */}
                 {deltaInfo && (
-                  <div className="pointer-events-none invisible absolute top-full right-0 z-[200] mt-2 w-60 rounded-xl border border-zinc-700 bg-zinc-900 px-3 py-2.5 shadow-2xl group-hover:visible animate-fade-in">
+                  <div className="pointer-events-none invisible absolute top-full right-0 z-[200] mt-2 w-60 rounded-xl border border-[#374151] bg-[#1F2937] px-3 py-2.5 shadow-2xl group-hover:visible animate-fade-in">
                     <p className={`text-[10px] font-bold uppercase tracking-wider mb-1 ${scoreDelta >= 0 ? 'text-emerald-400' : 'text-rose-400'}`}>
                       {deltaInfo.label}
                     </p>
-                    <p className="text-[11px] text-zinc-300 leading-relaxed">{deltaInfo.reason}</p>
+                    <p className="text-[11px] text-[#D1D5DB] leading-relaxed">{deltaInfo.reason}</p>
                   </div>
                 )}
               </div>
@@ -93,10 +93,10 @@ export function DealRoomPage() {
       {/* Main layout */}
       <div className="flex flex-1 overflow-hidden">
         {/* Org chart */}
-        <div className="flex w-[54%] flex-col border-r border-zinc-800 overflow-hidden">
-          <div className="border-b border-zinc-800 bg-zinc-900/30 px-4 py-2 flex items-center justify-between">
+        <div className="flex w-[54%] flex-col border-r border-[#E5E7EB] overflow-hidden">
+          <div className="border-b border-[#E5E7EB] bg-[#F8FAFC] px-4 py-2 flex items-center justify-between">
             <h3 className="text-[10px] font-semibold uppercase tracking-widest text-[#475569]">Buying Committee</h3>
-            <span className="text-[10px] text-zinc-700">Click a contact for details</span>
+            <span className="text-[10px] text-[#94A3B8]">Click a contact for details</span>
           </div>
           <div className="flex-1">
             <OrgChartCanvas dealContacts={myContacts} onContactSelect={setSelectedContact} />
@@ -108,10 +108,10 @@ export function DealRoomPage() {
           <div className="flex-1 overflow-y-auto">
             <div className="p-4 space-y-5">
               <AIInsightsPanel />
-              <div className="border-t border-zinc-800 pt-4">
+              <div className="border-t border-[#E5E7EB] pt-4">
                 <RecommendedActions />
               </div>
-              <div className="border-t border-zinc-800 pt-4 pb-2">
+              <div className="border-t border-[#E5E7EB] pt-4 pb-2">
                 <ActivityTimeline />
               </div>
             </div>

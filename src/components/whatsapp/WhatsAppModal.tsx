@@ -109,15 +109,15 @@ export function WhatsAppModal() {
 
   return (
     <div className='fixed inset-0 z-50 flex items-center justify-center bg-black/75 backdrop-blur-sm'>
-      <div className='mx-4 w-full max-w-md rounded-2xl border border-zinc-700/50 bg-zinc-900 shadow-2xl animate-bounce-in'>
+      <div className='mx-4 w-full max-w-md rounded-2xl border border-[#E5E7EB] bg-white shadow-2xl animate-bounce-in'>
         {/* Header */}
-        <div className='flex items-center justify-between border-b border-zinc-800 px-5 py-4'>
+        <div className='flex items-center justify-between border-b border-[#E5E7EB] px-5 py-4'>
           <div className='flex items-center gap-2.5'>
             <div className='flex h-7 w-7 items-center justify-center rounded-full bg-emerald-500/20 border border-emerald-500/30'>
               <MessageSquare className='h-3.5 w-3.5 text-[#059669]' />
             </div>
             <div>
-              <p className='font-display text-sm font-600 text-zinc-50'>
+              <p className='font-display text-sm font-600 text-[#0F172A]'>
                 WhatsApp Follow-Up
               </p>
               <p className='text-[11px] text-[#475569]'>AI Recommended Action</p>
@@ -132,7 +132,7 @@ export function WhatsAppModal() {
         </div>
 
         {/* To */}
-        <div className='border-b border-zinc-800 px-5 py-3'>
+        <div className='border-b border-[#E5E7EB] px-5 py-3'>
           <p className='mb-2 text-[10px] font-semibold uppercase tracking-widest text-[#475569]'>
             To
           </p>
@@ -143,7 +143,7 @@ export function WhatsAppModal() {
               size='lg'
             />
             <div>
-              <p className='text-sm font-semibold text-zinc-100'>
+              <p className='text-sm font-semibold text-[#0F172A]'>
                 {whatsAppTarget.full_name}
               </p>
               <p className='text-[11px] text-[#64748B]'>
@@ -161,7 +161,7 @@ export function WhatsAppModal() {
           <div className='mb-2 flex items-center justify-between'>
             <div className='flex items-center gap-1.5'>
               <Bot className='h-3.5 w-3.5 text-blue-400' />
-              <p className='text-xs font-semibold text-zinc-400'>AI Draft</p>
+              <p className='text-xs font-semibold text-[#475569]'>AI Draft</p>
             </div>
             <div className='flex items-center gap-2'>
               <button
@@ -186,7 +186,7 @@ export function WhatsAppModal() {
           </div>
 
           {isGeneratingMessage || isRegenerating ? (
-            <div className='flex items-center gap-2.5 rounded-xl border border-zinc-800 bg-zinc-800/50 p-4 text-sm text-[#64748B]'>
+            <div className='flex items-center gap-2.5 rounded-xl border border-[#E5E7EB] bg-[#F8FAFC] p-4 text-sm text-[#64748B]'>
               <Loader2 className='h-4 w-4 animate-spin text-blue-400' />
               {isRegenerating
                 ? 'Loading next variation…'
@@ -197,20 +197,20 @@ export function WhatsAppModal() {
               value={editedMessage}
               onChange={(e) => setEditedMessage(e.target.value)}
               rows={7}
-              className='w-full rounded-xl border border-zinc-700 bg-zinc-800 p-3 text-sm text-zinc-200 placeholder-zinc-700 outline-none focus:border-amber-400/40 focus:ring-1 focus:ring-amber-400/20 resize-none transition-colors font-body'
+              className='w-full rounded-xl border border-[#CBD5E1] bg-[#F8FAFC] p-3 text-sm text-[#0F172A] placeholder-[#94A3B8] outline-none focus:border-[#059669]/40 focus:ring-1 focus:ring-[#059669]/20 resize-none transition-colors font-body'
             />
           ) : (
-            <div className='min-h-[120px] rounded-xl border border-emerald-500/20 bg-emerald-500/5 p-3 text-sm text-zinc-200 whitespace-pre-line leading-relaxed'>
+            <div className='min-h-[120px] rounded-xl border border-[#A7F3D0] bg-[#ECFDF5] p-3 text-sm text-[#065F46] whitespace-pre-line leading-relaxed'>
               {editedMessage}
             </div>
           )}
         </div>
 
         {/* Actions */}
-        <div className='flex gap-2 border-t border-zinc-800 px-5 py-4'>
+        <div className='flex gap-2 border-t border-[#E5E7EB] px-5 py-4'>
           <button
             onClick={closeWhatsAppModal}
-            className='flex-1 rounded-lg border border-zinc-700 py-2 text-sm font-medium text-[#64748B] hover:border-zinc-600 hover:text-[#0F172A] transition-colors'
+            className='flex-1 rounded-lg border border-[#CBD5E1] py-2 text-sm font-medium text-[#64748B] hover:border-[#94A3B8] hover:text-[#0F172A] transition-colors'
           >
             Skip
           </button>

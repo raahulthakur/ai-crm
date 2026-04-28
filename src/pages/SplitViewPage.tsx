@@ -213,7 +213,7 @@ export function SplitViewPage() {
                         <span
                           className={`h-1.5 w-1.5 rounded-full shrink-0 ${dot}`}
                         />
-                        <span className='text-zinc-400'>{label}</span>
+                        <span className='text-[#475569]'>{label}</span>
                       </div>
                     ))}
                   </div>

@@ -55,13 +55,13 @@ export function DealListPage() {
     <div className="p-6 space-y-5">
       <div className="flex items-end justify-between">
         <div>
-          <h2 className="font-display text-xl font-700 tracking-tight text-zinc-50">All Deals</h2>
+          <h2 className="font-display text-xl font-700 tracking-tight text-[#0F172A]">All Deals</h2>
           <div className="mt-1 flex items-center gap-2 text-sm flex-wrap">
             <span className="text-[#64748B] text-xs font-medium">Total value</span>
-            <span className="font-mono text-amber-400 font-bold">{formatCurrency(filtered.reduce((s, d) => s + d.arr_value, 0))}</span>
-            <span className="text-zinc-700 mx-1">·</span>
+            <span className="font-mono text-[#059669] font-bold">{formatCurrency(filtered.reduce((s, d) => s + d.arr_value, 0))}</span>
+            <span className="text-[#CBD5E1] mx-1">·</span>
             <span className="text-[#64748B] text-xs font-medium">Total deals</span>
-            <span className="font-mono text-zinc-300 font-bold">{filtered.length} deal{filtered.length !== 1 ? 's' : ''}</span>
+            <span className="font-mono text-[#0F172A] font-bold">{filtered.length} deal{filtered.length !== 1 ? 's' : ''}</span>
           </div>
         </div>
         <button onClick={() => setModalOpen(true)} className="btn-amber">
@@ -71,28 +71,28 @@ export function DealListPage() {
 
       {/* Filters */}
       <div className="flex flex-wrap items-center gap-2">
-        <div className="flex items-center gap-1.5 rounded-lg border border-zinc-700/60 bg-zinc-900 px-3 py-1.5">
+        <div className="flex items-center gap-1.5 rounded-lg border border-[#CBD5E1] bg-white px-3 py-1.5">
           <span className="text-[10px] font-semibold uppercase tracking-wider text-[#475569]">ARR &gt;</span>
           <span className="text-xs text-[#475569]">$</span>
           <input type="number" min={0} placeholder="0" value={filters.arrGt}
             onChange={(e) => setFilters((f) => ({ ...f, arrGt: e.target.value }))}
-            className="w-12 bg-transparent text-xs text-zinc-200 outline-none placeholder-zinc-700 font-mono" />
+            className="w-12 bg-transparent text-xs text-[#0F172A] outline-none placeholder-[#94A3B8] font-mono" />
           <span className="text-xs text-[#475569]">K</span>
         </div>
         <select value={filters.stage} onChange={(e) => setFilters((f) => ({ ...f, stage: e.target.value }))}
-          className="rounded-lg border border-zinc-700/60 bg-zinc-900 px-2.5 py-1.5 text-xs text-zinc-300 outline-none cursor-pointer appearance-none">
+          className="rounded-lg border border-[#CBD5E1] bg-white px-2.5 py-1.5 text-xs text-[#0F172A] outline-none cursor-pointer appearance-none">
           <option value="all">All Stages</option>
           {ALL_STAGES.map((s) => <option key={s} value={s}>{STAGE_LABELS[s]}</option>)}
         </select>
         <select value={filters.health} onChange={(e) => setFilters((f) => ({ ...f, health: e.target.value as Filters['health'] }))}
-          className="rounded-lg border border-zinc-700/60 bg-zinc-900 px-2.5 py-1.5 text-xs text-zinc-300 outline-none cursor-pointer appearance-none">
+          className="rounded-lg border border-[#CBD5E1] bg-white px-2.5 py-1.5 text-xs text-[#0F172A] outline-none cursor-pointer appearance-none">
           <option value="all">All Health</option>
           <option value="healthy">Healthy ≥80%</option>
           <option value="unhealthy">At Risk &lt;80%</option>
         </select>
         {hasFilters && (
           <button onClick={() => setFilters({ arrGt: '', stage: 'all', health: 'all' })}
-            className="flex items-center gap-1 rounded-lg border border-zinc-700/60 bg-zinc-900 px-2.5 py-1.5 text-xs text-[#64748B] hover:text-[#0F172A] transition-colors">
+            className="flex items-center gap-1 rounded-lg border border-[#CBD5E1] bg-white px-2.5 py-1.5 text-xs text-[#64748B] hover:text-[#0F172A] transition-colors">
             <X className="h-3 w-3" /> Clear
           </button>
         )}
@@ -115,30 +115,30 @@ export function DealListPage() {
       )}
 
       {/* Table */}
-      <div className="rounded-xl border border-zinc-800 overflow-hidden">
+      <div className="rounded-xl border border-[#E5E7EB] overflow-hidden">
         <table className="w-full">
           <thead>
-            <tr className="border-b border-zinc-800 bg-zinc-900/50">
+            <tr className="border-b border-[#E5E7EB] bg-[#F8FAFC]">
               {['Company', 'ARR', 'Stage', 'Health', 'Activity', ''].map((h) => (
-                <th key={h} className="px-4 py-2.5 text-left text-[10px] font-semibold uppercase tracking-widest text-[#475569]">{h}</th>
+                <th key={h} className="px-4 py-2.5 text-left text-[10px] font-semibold uppercase tracking-widest text-[#64748B]">{h}</th>
               ))}
             </tr>
           </thead>
-          <tbody className="bg-zinc-950 divide-y divide-zinc-900">
+          <tbody className="bg-white divide-y divide-[#F1F5F9]">
             {filtered.map((deal) => (
-              <tr key={deal.id} className="cursor-pointer transition-colors hover:bg-zinc-900/70 group" onClick={() => handleOpen(deal)}>
+              <tr key={deal.id} className="cursor-pointer transition-colors hover:bg-[#F8FAFC] group" onClick={() => handleOpen(deal)}>
                 <td className="px-4 py-3.5">
                   <div className="flex items-center gap-2">
                     {deal.is_stuck && <AlertTriangle className="h-3.5 w-3.5 shrink-0 text-[#EF4444]" />}
                     <div>
-                      <p className="text-sm font-semibold text-zinc-100">{deal.company_name}</p>
+                      <p className="text-sm font-semibold text-[#0F172A]">{deal.company_name}</p>
                       {deal.stuck_reason && <p className="text-xs text-[#EF4444] truncate max-w-[180px]">{deal.stuck_reason}</p>}
                     </div>
                   </div>
                 </td>
-                <td className="px-4 py-3.5"><span className="font-mono text-sm font-semibold text-amber-400">{formatCurrency(deal.arr_value)}</span></td>
+                <td className="px-4 py-3.5"><span className="font-mono text-sm font-semibold text-[#059669]">{formatCurrency(deal.arr_value)}</span></td>
                 <td className="px-4 py-3.5">
-                  <span className="rounded-full border border-zinc-700/50 bg-zinc-800/60 px-2 py-0.5 text-[10px] font-medium text-zinc-400">{STAGE_LABELS[deal.stage]}</span>
+                  <span className="rounded-full border border-[#CBD5E1] bg-[#F1F5F9] px-2 py-0.5 text-[10px] font-medium text-[#475569]">{STAGE_LABELS[deal.stage]}</span>
                 </td>
                 <td className="px-4 py-3.5"><HealthScoreBadge score={deal.health_score} /></td>
                 <td className="px-4 py-3.5">
@@ -154,49 +154,49 @@ export function DealListPage() {
             ))}
           </tbody>
         </table>
-        {filtered.length === 0 && <div className="py-16 text-center text-sm text-zinc-700 bg-zinc-950">No deals match the current filters.</div>}
+        {filtered.length === 0 && <div className="py-16 text-center text-sm text-[#475569] bg-white">No deals match the current filters.</div>}
       </div>
 
       {/* New Deal Modal */}
       {modalOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-sm">
-          <div className="mx-4 w-full max-w-md rounded-2xl border border-zinc-700/50 bg-zinc-900 shadow-2xl animate-bounce-in">
-            <div className="flex items-center justify-between border-b border-zinc-800 px-5 py-4">
+          <div className="mx-4 w-full max-w-md rounded-2xl border border-[#E5E7EB] bg-white shadow-2xl animate-bounce-in">
+            <div className="flex items-center justify-between border-b border-[#E5E7EB] px-5 py-4">
               <div>
-                <p className="font-display text-sm font-600 text-zinc-50">New Deal</p>
+                <p className="font-display text-sm font-600 text-[#0F172A]">New Deal</p>
                 <p className="text-[11px] text-[#64748B] mt-0.5">Add a company to your pipeline</p>
               </div>
               <button onClick={() => setModalOpen(false)} className="rounded-lg p-1 text-[#475569] hover:text-[#0F172A] transition-colors"><X className="h-4 w-4" /></button>
             </div>
             <form onSubmit={handleCreateDeal} className="px-5 py-4 space-y-4">
               <div>
-                <label className="mb-1.5 block text-xs font-semibold text-zinc-400 uppercase tracking-wider">Company Name *</label>
+                <label className="mb-1.5 block text-xs font-semibold text-[#64748B] uppercase tracking-wider">Company Name *</label>
                 <input type="text" required placeholder="e.g. Acme Corp" value={form.company}
                   onChange={(e) => setForm((f) => ({ ...f, company: e.target.value }))}
-                  className="w-full rounded-lg border border-zinc-700 bg-zinc-800 px-3 py-2.5 text-sm text-zinc-100 placeholder-[#94A3B8] outline-none focus:border-amber-400/60 focus:ring-1 focus:ring-amber-400/30 transition-colors" />
+                  className="w-full rounded-lg border border-[#CBD5E1] bg-[#F8FAFC] px-3 py-2.5 text-sm text-[#0F172A] placeholder-[#94A3B8] outline-none focus:border-[#059669]/60 focus:ring-1 focus:ring-[#059669]/20 transition-colors" />
               </div>
               <div className="grid grid-cols-2 gap-3">
                 <div>
-                  <label className="mb-1.5 block text-xs font-semibold text-zinc-400 uppercase tracking-wider">ARR ($K)</label>
-                  <div className="flex items-center gap-1 rounded-lg border border-zinc-700 bg-zinc-800 px-3 py-2.5 focus-within:border-amber-400/60 transition-colors">
+                  <label className="mb-1.5 block text-xs font-semibold text-[#64748B] uppercase tracking-wider">ARR ($K)</label>
+                  <div className="flex items-center gap-1 rounded-lg border border-[#CBD5E1] bg-[#F8FAFC] px-3 py-2.5 focus-within:border-[#059669]/60 transition-colors">
                     <span className="text-xs font-mono text-[#475569]">$</span>
                     <input type="number" min={1} placeholder="50" value={form.arr}
                       onChange={(e) => setForm((f) => ({ ...f, arr: e.target.value }))}
-                      className="w-full bg-transparent text-sm text-zinc-100 font-mono outline-none placeholder-zinc-700" />
+                      className="w-full bg-transparent text-sm text-[#0F172A] font-mono outline-none placeholder-[#94A3B8]" />
                     <span className="text-xs font-mono text-[#475569]">K</span>
                   </div>
                 </div>
                 <div>
-                  <label className="mb-1.5 block text-xs font-semibold text-zinc-400 uppercase tracking-wider">Stage</label>
+                  <label className="mb-1.5 block text-xs font-semibold text-[#64748B] uppercase tracking-wider">Stage</label>
                   <select value={form.stage} onChange={(e) => setForm((f) => ({ ...f, stage: e.target.value as DealStage }))}
-                    className="w-full rounded-lg border border-zinc-700 bg-zinc-800 px-3 py-2.5 text-sm text-zinc-300 outline-none focus:border-amber-400/60 cursor-pointer appearance-none">
+                    className="w-full rounded-lg border border-[#CBD5E1] bg-[#F8FAFC] px-3 py-2.5 text-sm text-[#0F172A] outline-none focus:border-[#059669]/60 cursor-pointer appearance-none">
                     {ALL_STAGES.map((s) => <option key={s} value={s}>{STAGE_LABELS[s]}</option>)}
                   </select>
                 </div>
               </div>
               <div className="flex gap-2 pt-1">
                 <button type="button" onClick={() => setModalOpen(false)}
-                  className="flex-1 rounded-lg border border-zinc-700 py-2.5 text-sm font-medium text-[#64748B] hover:border-zinc-600 hover:text-[#0F172A] transition-colors">Cancel</button>
+                  className="flex-1 rounded-lg border border-[#CBD5E1] py-2.5 text-sm font-medium text-[#64748B] hover:border-[#94A3B8] hover:text-[#0F172A] transition-colors">Cancel</button>
                 <button type="submit" className="flex-1 btn-amber justify-center py-2.5 text-sm">Add Deal</button>
               </div>
             </form>
@@ -209,10 +209,10 @@ export function DealListPage() {
 
 function StuckDealRow({ deal, onOpen }: { deal: Deal; onOpen: (d: Deal) => void }) {
   return (
-    <div className="flex items-center justify-between rounded-lg border border-zinc-800 bg-zinc-900/60 px-3 py-2">
+    <div className="flex items-center justify-between rounded-lg border border-[#FECACA] bg-white/70 px-3 py-2">
       <div className="flex items-center gap-3 min-w-0">
-        <span className="font-semibold text-sm text-zinc-100 truncate">{deal.company_name}</span>
-        <span className="font-mono text-xs font-semibold text-amber-400 shrink-0">{formatCurrency(deal.arr_value)}</span>
+        <span className="font-semibold text-sm text-[#0F172A] truncate">{deal.company_name}</span>
+        <span className="font-mono text-xs font-semibold text-[#059669] shrink-0">{formatCurrency(deal.arr_value)}</span>
         <HealthScoreBadge score={deal.health_score} size="sm" showLabel={false} />
         <span className="text-xs text-[#EF4444] truncate hidden sm:block">{deal.stuck_reason}</span>
       </div>

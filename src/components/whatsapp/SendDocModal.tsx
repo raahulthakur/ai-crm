@@ -109,15 +109,15 @@ export function SendDocModal({ actionId }: { actionId: string }) {
 
   return (
     <div className='fixed inset-0 z-50 flex items-center justify-center bg-black/75 backdrop-blur-sm'>
-      <div className='mx-4 w-full max-w-md rounded-2xl border border-zinc-700/50 bg-zinc-900 shadow-2xl animate-bounce-in'>
+      <div className='mx-4 w-full max-w-md rounded-2xl border border-[#E5E7EB] bg-white shadow-2xl animate-bounce-in'>
         {/* Header */}
-        <div className='flex items-center justify-between border-b border-zinc-800 px-5 py-4'>
+        <div className='flex items-center justify-between border-b border-[#E5E7EB] px-5 py-4'>
           <div className='flex items-center gap-2.5'>
-            <div className='flex h-7 w-7 items-center justify-center rounded-full bg-teal-500/20 border border-teal-500/30'>
+            <div className='flex h-7 w-7 items-center justify-center rounded-full bg-teal-100 border border-teal-200'>
               <FileText className='h-3.5 w-3.5 text-teal-700' />
             </div>
             <div>
-              <p className='font-display text-sm font-600 text-zinc-50'>
+              <p className='font-display text-sm font-600 text-[#0F172A]'>
                 Send Compliance Document
               </p>
               <p className='text-[11px] text-[#475569]'>
@@ -143,13 +143,13 @@ export function SendDocModal({ actionId }: { actionId: string }) {
               {attachments.map((name) => (
                 <div
                   key={name}
-                  className='flex items-center gap-2.5 rounded-xl border border-zinc-700/50 bg-zinc-800/50 px-3 py-2.5'
+                  className='flex items-center gap-2.5 rounded-xl border border-[#E5E7EB] bg-[#F8FAFC] px-3 py-2.5'
                 >
-                  <div className='flex h-8 w-8 items-center justify-center rounded-lg bg-teal-500/15 border border-teal-500/20 shrink-0'>
+                  <div className='flex h-8 w-8 items-center justify-center rounded-lg bg-teal-100 border border-teal-200 shrink-0'>
                     <FileText className='h-3.5 w-3.5 text-teal-700' />
                   </div>
                   <div className='min-w-0 flex-1'>
-                    <p className='font-mono text-xs font-semibold text-zinc-200 truncate'>
+                    <p className='font-mono text-xs font-semibold text-[#0F172A] truncate'>
                       {name}
                     </p>
                   </div>
@@ -186,11 +186,11 @@ export function SendDocModal({ actionId }: { actionId: string }) {
               {recipients.map((r) => (
                 <div
                   key={r.email}
-                  className='flex items-center gap-2.5 rounded-xl border border-zinc-700/50 bg-zinc-800/40 px-3 py-2'
+                  className='flex items-center gap-2.5 rounded-xl border border-[#E5E7EB] bg-[#F8FAFC] px-3 py-2'
                 >
                   <Avatar name={r.name} size='sm' />
                   <div className='min-w-0 flex-1'>
-                    <p className='text-xs font-semibold text-zinc-200'>
+                    <p className='text-xs font-semibold text-[#0F172A]'>
                       {r.name}
                     </p>
                     <p className='text-[10px] text-[#475569]'>
@@ -200,7 +200,7 @@ export function SendDocModal({ actionId }: { actionId: string }) {
                   {r.removable && (
                     <button
                       onClick={() => removeRecipient(r.email)}
-                      className='shrink-0 rounded p-0.5 text-zinc-700 hover:text-rose-400 transition-colors'
+                      className='shrink-0 rounded p-0.5 text-[#94A3B8] hover:text-rose-500 transition-colors'
                     >
                       <X className='h-3.5 w-3.5' />
                     </button>
@@ -212,7 +212,7 @@ export function SendDocModal({ actionId }: { actionId: string }) {
             {/* Add by email */}
             {showEmailInput ? (
               <div className='mt-2 flex gap-2'>
-                <div className='flex flex-1 items-center gap-1.5 rounded-lg border border-zinc-700 bg-zinc-800 px-3 py-2 focus-within:border-amber-400/40 transition-colors'>
+                <div className='flex flex-1 items-center gap-1.5 rounded-lg border border-[#CBD5E1] bg-[#F8FAFC] px-3 py-2 focus-within:border-[#059669]/40 transition-colors'>
                   <Mail className='h-3 w-3 text-[#475569] shrink-0' />
                   <input
                     type='email'
@@ -221,7 +221,7 @@ export function SendDocModal({ actionId }: { actionId: string }) {
                     onChange={(e) => setEmailInput(e.target.value)}
                     onKeyDown={(e) => e.key === 'Enter' && addEmailRecipient()}
                     autoFocus
-                    className='w-full bg-transparent text-xs text-zinc-200 placeholder-[#94A3B8] outline-none'
+                    className='w-full bg-transparent text-xs text-[#0F172A] placeholder-[#94A3B8] outline-none'
                   />
                 </div>
                 <button
@@ -252,7 +252,7 @@ export function SendDocModal({ actionId }: { actionId: string }) {
         </div>
 
         {/* Footer */}
-        <div className='flex gap-2 border-t border-zinc-800 px-5 py-4'>
+        <div className='flex gap-2 border-t border-[#E5E7EB] px-5 py-4'>
           <button
             onClick={closeSendDocModal}
             className='flex-1 rounded-lg border border-[#CBD5E1] py-2.5 text-sm font-medium text-gray-700 hover:border-gray-400 hover:text-[#0F172A] transition-colors'

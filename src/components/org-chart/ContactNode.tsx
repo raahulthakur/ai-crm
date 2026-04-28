@@ -90,7 +90,7 @@ export const ContactNode = memo(({ data }: { data: NodeData }) => {
       </div>
 
       {/* Click hint */}
-      <p className="mt-1.5 text-[9px] text-zinc-700 text-center">Click for details</p>
+      <p className="mt-1.5 text-[9px] text-[#94A3B8] text-center">Click for details</p>
 
       <Handle type="source" position={Position.Bottom} className="!border-0 !bg-zinc-700 !h-1.5 !w-1.5 !opacity-60" />
     </div>
